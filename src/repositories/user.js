@@ -9,13 +9,9 @@ const getUserByUsername = async (username) => {
       [Op.iLike]: username.trim()
     }
   };
-  try {
-    const user = await User.findOne({ where });
-    const result = user ? mapUserModelToUserDto(user) : null;
-    return result;
-  } catch (error) {
-    console.log(error);
-  }
+  const user = await User.findOne({ where });
+  const result = user ? mapUserModelToUserDto(user) : null;
+  return result;
 };
 
 const mapUserModelToUserDto = (userModel) => {
