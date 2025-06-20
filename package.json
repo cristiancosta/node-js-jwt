@@ -1,0 +1,30 @@
+{
+  "name": "node-js-jwt",
+  "version": "1.0.0",
+  "description": "Node js JWT",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "nodemon src/server.js",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cristiancosta/node-js-jwt.git"
+  },
+  "keywords": [
+    "jwt",
+    "node",
+    "js"
+  ],
+  "author": "Cristian Costa <cristiancosta1991@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cristiancosta/node-js-jwt/issues"
+  },
+  "homepage": "https://github.com/cristiancosta/node-js-jwt#readme",
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "express": "^5.1.0",
+    "nodemon": "^3.1.10"
+  }
+}
