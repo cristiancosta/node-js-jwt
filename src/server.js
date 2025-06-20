@@ -5,9 +5,9 @@ const app = require('./app');
 const configuration = require('./configuration');
 
 // Database.
-const database = require('./database');
+const sequelize = require('./sequelize');
 
-database
+sequelize
   .sync()
   .then(() => console.log('Server connected to database'))
   .catch((error) => console.log(`Server unable to connect to database: ${JSON.stringify(error)}`))
