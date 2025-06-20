@@ -1,4 +1,10 @@
 // App.
 const app = require('./app');
 
-app.listen(8080, () => console.log('Server running on port 8080'));
+// Configuration.
+const configuration = require('./configuration');
+
+app.listen(
+  configuration.server.port,
+  () => console.log(`Server running on port ${configuration.server.port}`)
+);
