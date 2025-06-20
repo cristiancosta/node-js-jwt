@@ -2,11 +2,11 @@ require('dotenv').config();
 
 const configuration = {
   db: {
-    host: process.env.DB_HOST || 'postgres',
+    host: process.env.DB_HOST || 'localhost',
     port: parseInt(process.env.DB_PORT, 10) || 5432,
-    user: process.env.DB_USER || 'postgres',
-    password: process.env.DB_PASSWORD || '123456',
-    database: process.env.DB_NAME || 'postgres'
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || 'root',
+    database: process.env.DB_NAME || 'nodejwt'
   },
   jwt: {
     secret: process.env.JWT_SECRET || 'mysecret',
