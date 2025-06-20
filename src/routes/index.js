@@ -2,11 +2,11 @@ const express = require('express');
 
 // Routes.
 const auth = require('./auth');
+const ping = require('./ping');
 
 const router = express.Router();
 
-router.get('/ping', (req, res) => res.send({ message: 'pong' }));
-
-router.use('/auth', (req, res) => res.send({ message: 'here goes auth' }));
+router.use('/ping', ping);
+router.use('/auth', auth);
 
 module.exports = router;

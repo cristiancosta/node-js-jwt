@@ -1,10 +1,10 @@
 const express = require('express');
 
 // Controllers.
-const auth = require('../controllers/auth');
+const ping = require('../controllers/ping');
 
 const router = express.Router();
 
-router.post('/sign-in', auth.signIn);
+router.get('/', ping.get);
 
 module.exports = router;
