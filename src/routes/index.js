@@ -1,12 +1,12 @@
 const express = require('express');
 
 // Routes.
-const auth = require('./auth');
-const ping = require('./ping');
+const authRoute = require('./auth');
+const healthRoute = require('./health');
 
 const router = express.Router();
 
-router.use('/ping', ping);
-router.use('/auth', auth);
+router.use('/auth', authRoute);
+router.use('/health', healthRoute);
 
 module.exports = router;
