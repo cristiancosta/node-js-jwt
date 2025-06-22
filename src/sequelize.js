@@ -9,7 +9,7 @@ const sequelize = new Sequelize(database, user, password, {
   host,
   port,
   dialect: 'postgres',
-  logging: true,
+  logging: false,
 });
 
 sequelize.authenticate();

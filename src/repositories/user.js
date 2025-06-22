@@ -6,7 +6,7 @@ const User = require('../models/user');
 const getUserByUsername = async (username) => {
   const where = {
     username: {
-      [Op.iLike]: username.trim()
+      [Op.iLike]: username
     }
   };
   const user = await User.findOne({ where });
