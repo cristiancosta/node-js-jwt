@@ -12,7 +12,8 @@ sequelize
   .then(() => console.log('Server connected to database'))
   .catch((error) => console.log(`Server unable to connect to database: ${JSON.stringify(error)}`))
 
+const { port } = configuration.server;
 app.listen(
-  configuration.server.port,
-  () => console.log(`Server running on port ${configuration.server.port}`)
+  port,
+  () => console.log(`Server running on port ${port}`)
 );
