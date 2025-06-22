@@ -1,6 +1,6 @@
 const request = require("supertest");
-const { hashSync } = require("bcryptjs");
 const { sign } = require("jsonwebtoken");
+const { hashSync } = require("bcryptjs");
 
 // Constants.
 const { httpStatusCode, errorMessage } = require("../src/constants");
@@ -19,7 +19,6 @@ describe("Auth", () => {
   describe("POST /auth/sign-in", () => {
 
     beforeAll(async () => {
-      await User.sync({ force: true });
       await User.create({
         username: "testuser",
         password: hashSync("Abcdef2!", 10),
@@ -61,7 +60,6 @@ describe("Auth", () => {
 
   describe("POST /auth/sign-up", () => {
     beforeAll(async () => {
-      await User.sync({ force: true });
       await User.create({
         id: 50,
         username: "testuser",
@@ -98,7 +96,6 @@ describe("Auth", () => {
   describe("POST /auth/refresh", () => {
 
     beforeAll(async () => {
-      await User.sync({ force: true });
       await User.create({
         id: 100,
         username: "testuser",
