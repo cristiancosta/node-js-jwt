@@ -1,19 +1,19 @@
-const { compareSync, hashSync } = require("bcryptjs");
+const { compareSync, hashSync } = require('bcryptjs');
 const {
   sign,
   verify,
   TokenExpiredError,
-  JsonWebTokenError,
-} = require("jsonwebtoken");
+  JsonWebTokenError
+} = require('jsonwebtoken');
 
 // Constants.
-const { errorMessage } = require("../constants");
+const { errorMessage } = require('../constants');
 
 // Repositories.
-const userRepository = require("../repositories/user");
+const userRepository = require('../repositories/user');
 
 // Configuration.
-const configuration = require("../configuration");
+const configuration = require('../configuration');
 
 const signIn = async ({ username, password }) => {
   const user = await userRepository.getUserByUsername(username.trim());
@@ -27,13 +27,13 @@ const signIn = async ({ username, password }) => {
 
   const payload = { id: user.id };
   const { secret } = configuration.jwt;
-  const options = { algorithm: "HS512" };
+  const options = { algorithm: 'HS512' };
 
-  options.subject = "ACCESS_TOKEN";
+  options.subject = 'ACCESS_TOKEN';
   options.expiresIn = configuration.jwt.accessTokenDuration;
   const accessToken = sign(payload, secret, options);
 
-  options.subject = "REFRESH_TOKEN";
+  options.subject = 'REFRESH_TOKEN';
   options.expiresIn = configuration.jwt.refreshTokenDuration;
   const refreshToken = sign(payload, secret, options);
 
@@ -46,12 +46,15 @@ const signUp = async ({ username, password }) => {
     throw new Error(errorMessage.USER_ALREADY_EXIST);
   }
   const hashedPassword = hashSync(password.trim());
-  const createdUser = await userRepository.createUser({ username: username.trim(), password: hashedPassword });
+  const createdUser = await userRepository.createUser({
+    username: username.trim(),
+    password: hashedPassword
+  });
   return {
     id: createdUser.id,
     username: createdUser.username,
     createdAt: createdUser.createdAt,
-    updatedAt: createdUser.updatedAt,
+    updatedAt: createdUser.updatedAt
   };
 };
 
@@ -80,13 +83,13 @@ const refresh = async ({ refreshToken }) => {
 
   // Crear nuevo par de tokens.
   const payload = { id: user.id };
-  const options = { algorithm: "HS512" };
+  const options = { algorithm: 'HS512' };
 
-  options.subject = "ACCESS_TOKEN";
+  options.subject = 'ACCESS_TOKEN';
   options.expiresIn = configuration.jwt.accessTokenDuration;
   const newAccessToken = sign(payload, secret, options);
 
-  options.subject = "REFRESH_TOKEN";
+  options.subject = 'REFRESH_TOKEN';
   options.expiresIn = configuration.jwt.refreshTokenDuration;
   const newRefreshToken = sign(payload, secret, options);
 
@@ -96,5 +99,5 @@ const refresh = async ({ refreshToken }) => {
 module.exports = {
   signIn,
   signUp,
-  refresh,
+  refresh
 };

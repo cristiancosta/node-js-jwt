@@ -39,5 +39,5 @@ const mapUserModelToUserDto = (userModel) => {
 module.exports = {
   getUserByUsername,
   createUser,
-  getUserById,
+  getUserById
 };

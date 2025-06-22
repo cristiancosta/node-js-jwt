@@ -1,8 +1,8 @@
 // Constants.
-const { httpStatusCode, errorMessage } = require("../constants");
+const { httpStatusCode, errorMessage } = require('../constants');
 
 // Services.
-const authService = require("../services/auth");
+const authService = require('../services/auth');
 
 const signIn = async (req, res) => {
   try {
@@ -16,7 +16,7 @@ const signIn = async (req, res) => {
     } else if (message === errorMessage.INVALID_CREDENTIALS) {
       res.status(httpStatusCode.BAD_REQUEST).send({ error: message });
     } else {
-      console.error("signIn#error", error);
+      console.error('signIn#error', error);
       res
         .status(httpStatusCode.INTERNAL_SERVER_ERROR)
         .send({ error: errorMessage.INTERNAL_SERVER_ERROR });
@@ -34,7 +34,7 @@ const signUp = async (req, res) => {
     if (message === errorMessage.USER_ALREADY_EXIST) {
       res.status(httpStatusCode.CONFLICT).send({ error: message });
     } else {
-      console.error("signUp#error", error);
+      console.error('signUp#error', error);
       res
         .status(httpStatusCode.INTERNAL_SERVER_ERROR)
         .send({ error: errorMessage.INTERNAL_SERVER_ERROR });
@@ -56,7 +56,7 @@ const refresh = async (req, res) => {
     } else if (message === errorMessage.USER_NOT_FOUND) {
       res.status(httpStatusCode.NOT_FOUND).send({ error: message });
     } else {
-      console.error("refresh#error", error);
+      console.error('refresh#error', error);
       res
         .status(httpStatusCode.INTERNAL_SERVER_ERROR)
         .send({ error: errorMessage.INTERNAL_SERVER_ERROR });
@@ -67,5 +67,5 @@ const refresh = async (req, res) => {
 module.exports = {
   signIn,
   signUp,
-  refresh,
+  refresh
 };

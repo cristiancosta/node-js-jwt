@@ -8,5 +8,5 @@ module.exports = {
   httpStatusCode,
   errorMessage,
   modelName,
-  tableName,
+  tableName
 };
