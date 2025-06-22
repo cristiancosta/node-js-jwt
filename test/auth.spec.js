@@ -1,5 +1,5 @@
 const request = require("supertest");
-const { hash } = require("bcryptjs");
+const { hashSync } = require("bcryptjs");
 const { sign } = require("jsonwebtoken");
 
 // Constants.
@@ -22,7 +22,7 @@ describe("Auth", () => {
       await User.sync({ force: true });
       await User.create({
         username: "testuser",
-        password: await hash("Abcdef2!", 10),
+        password: hashSync("Abcdef2!", 10),
       });
     });
 
@@ -65,7 +65,7 @@ describe("Auth", () => {
       await User.create({
         id: 50,
         username: "testuser",
-        password: await hash("Abcdef2!", 10),
+        password: hashSync("Abcdef2!", 10),
       });
     });
 
@@ -81,6 +81,18 @@ describe("Auth", () => {
       expect(response.status).toBe(httpStatusCode.CONFLICT);
       expect(response.body.error).toBe(errorMessage.USER_ALREADY_EXIST);
     });
+
+    it("Should return 200 status code and created user data", async () => {
+      const response = await request(app)
+        .post("/auth/sign-up")
+        .send({ username: "testuser2", password: "Abcdef2!" });
+
+      expect(response.status).toBe(httpStatusCode.OK);
+      expect(response.body).toHaveProperty("id");
+      expect(response.body).toHaveProperty("username");
+      expect(response.body).toHaveProperty("createdAt");
+      expect(response.body).toHaveProperty("updatedAt");
+    });
   });
 
   describe("POST /auth/refresh", () => {
@@ -90,7 +102,7 @@ describe("Auth", () => {
       await User.create({
         id: 100,
         username: "testuser",
-        password: await hash("Abcdef2!", 10),
+        password: hashSync("Abcdef2!", 10),
       });
     });
 

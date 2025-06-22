@@ -14,6 +14,11 @@ const getUserByUsername = async (username) => {
   return result;
 };
 
+const createUser = async ({ username, password }) => {
+  const user = await User.create({ username, password });
+  return mapUserModelToUserDto(user);
+};
+
 const getUserById = async (id) => {
   const user = await User.findByPk(id);
   const result = user ? mapUserModelToUserDto(user) : null;
@@ -33,5 +38,6 @@ const mapUserModelToUserDto = (userModel) => {
 
 module.exports = {
   getUserByUsername,
+  createUser,
   getUserById,
 };

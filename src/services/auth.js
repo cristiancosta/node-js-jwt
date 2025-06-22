@@ -1,4 +1,4 @@
-const { compareSync } = require("bcryptjs");
+const { compareSync, hashSync } = require("bcryptjs");
 const {
   sign,
   verify,
@@ -45,6 +45,14 @@ const signUp = async ({ username, password }) => {
   if (user) {
     throw new Error(errorMessage.USER_ALREADY_EXIST);
   }
+  const hashedPassword = hashSync(password.trim());
+  const createdUser = await userRepository.createUser({ username: username.trim(), password: hashedPassword });
+  return {
+    id: createdUser.id,
+    username: createdUser.username,
+    createdAt: createdUser.createdAt,
+    updatedAt: createdUser.updatedAt,
+  };
 };
 
 const refresh = async ({ refreshToken }) => {
