@@ -1,8 +1,9 @@
 // Constants.
-const { errorMessage } = require("../constants");
+const { errorMessage } = require('../constants');
 
 // Repositories.
-const userRepository = require("../repositories/user"); 2
+const userRepository = require('../repositories/user');
+2;
 
 const getUser = async ({ id }) => {
   const user = await userRepository.getUserById(id);
@@ -12,5 +13,5 @@ const getUser = async ({ id }) => {
 };
 
 module.exports = {
-  getUser,
+  getUser
 };

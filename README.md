@@ -15,4 +15,3 @@ CREATE DATABASE nodejwt;
 Then, run the project:
 
 $ npm start
-

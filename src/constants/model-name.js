@@ -1,3 +1,3 @@
 module.exports = {
-  USER: 'user',
+  USER: 'user'
 };
