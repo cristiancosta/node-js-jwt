@@ -14,6 +14,12 @@ const getUserByUsername = async (username) => {
   return result;
 };
 
+const getUserById = async (id) => {
+  const user = await User.findByPk(id);
+  const result = user ? mapUserModelToUserDto(user) : null;
+  return result;
+};
+
 const mapUserModelToUserDto = (userModel) => {
   const userDto = {
     id: userModel.id,
@@ -27,4 +33,5 @@ const mapUserModelToUserDto = (userModel) => {
 
 module.exports = {
   getUserByUsername,
+  getUserById,
 };

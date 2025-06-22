@@ -1,11 +1,19 @@
+const { compareSync } = require("bcryptjs");
+const {
+  sign,
+  verify,
+  TokenExpiredError,
+  JsonWebTokenError,
+} = require("jsonwebtoken");
+
 // Constants.
-const { compareSync } = require('bcryptjs');
-const { errorMessage } = require('../constants');
+const { errorMessage } = require("../constants");
 
 // Repositories.
-const userRepository = require('../repositories/user');
-const { sign } = require('jsonwebtoken');
-const configuration = require('../configuration');
+const userRepository = require("../repositories/user");
+
+// Configuration.
+const configuration = require("../configuration");
 
 const signIn = async ({ username, password }) => {
   const user = await userRepository.getUserByUsername(username.trim());
@@ -25,13 +33,52 @@ const signIn = async ({ username, password }) => {
   options.expiresIn = configuration.jwt.accessTokenDuration;
   const accessToken = sign(payload, secret, options);
 
-  options.subject = "REFRESH_TOKEN",
+  options.subject = "REFRESH_TOKEN";
   options.expiresIn = configuration.jwt.refreshTokenDuration;
   const refreshToken = sign(payload, secret, options);
 
   return { accessToken, refreshToken };
 };
 
+const refresh = async ({ refreshToken }) => {
+  const { secret } = configuration.jwt;
+
+  // Verificar token.
+  let verifiedPayload;
+  try {
+    verifiedPayload = verify(refreshToken, secret);
+  } catch (error) {
+    if (error instanceof TokenExpiredError) {
+      throw new Error(errorMessage.TOKEN_EXPIRED);
+    }
+    if (error instanceof JsonWebTokenError) {
+      throw new Error(errorMessage.INVALID_TOKEN);
+    }
+  }
+
+  // Validar usuario.
+  const { id } = verifiedPayload;
+  const user = await userRepository.getUserById(id);
+  if (!user) {
+    throw new Error(errorMessage.USER_NOT_FOUND);
+  }
+
+  // Crear nuevo par de tokens.
+  const payload = { id: user.id };
+  const options = { algorithm: "HS512" };
+
+  options.subject = "ACCESS_TOKEN";
+  options.expiresIn = configuration.jwt.accessTokenDuration;
+  const newAccessToken = sign(payload, secret, options);
+
+  options.subject = "REFRESH_TOKEN";
+  options.expiresIn = configuration.jwt.refreshTokenDuration;
+  const newRefreshToken = sign(payload, secret, options);
+
+  return { accessToken: newAccessToken, refreshToken: newRefreshToken };
+};
+
 module.exports = {
-  signIn
+  signIn,
+  refresh,
 };

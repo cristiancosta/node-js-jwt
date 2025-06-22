@@ -10,10 +10,11 @@ const signIn = async (req, res) => {
     const result = await authService.signIn({ username, password });
     res.send(result);
   } catch (error) {
-    if (error.message === errorMessage.USER_NOT_FOUND) {
-      res.status(httpStatusCode.NOT_FOUND).send({ error: error.message });
-    } else if (error.message === errorMessage.INVALID_CREDENTIALS) {
-      res.status(httpStatusCode.BAD_REQUEST).send({ error: error.message });
+    const { message } = error;
+    if (message === errorMessage.USER_NOT_FOUND) {
+      res.status(httpStatusCode.NOT_FOUND).send({ error: message });
+    } else if (message === errorMessage.INVALID_CREDENTIALS) {
+      res.status(httpStatusCode.BAD_REQUEST).send({ error: message });
     } else {
       console.error("signIn#error", error);
       res
@@ -23,6 +24,29 @@ const signIn = async (req, res) => {
   }
 };
 
+const refresh = async (req, res) => {
+  try {
+    const { refreshToken } = req.body;
+    const result = await authService.refresh({ refreshToken });
+    res.send(result);
+  } catch (error) {
+    const { message } = error;
+    if (message === errorMessage.INVALID_TOKEN) {
+      res.status(httpStatusCode.UNAUTHORIZED).send({ error: message });
+    } else if (message === errorMessage.TOKEN_EXPIRED) {
+      res.status(httpStatusCode.UNAUTHORIZED).send({ error: message });
+    } else if (message === errorMessage.USER_NOT_FOUND) {
+      res.status(httpStatusCode.NOT_FOUND).send({ error: message });
+    } else {
+      console.error("refresh#error", error);
+      res
+        .status(httpStatusCode.INTERNAL_SERVER_ERROR)
+        .send({ error: errorMessage.INTERNAL_SERVER_ERROR });
+    }
+  }
+};
+
 module.exports = {
   signIn,
+  refresh,
 };

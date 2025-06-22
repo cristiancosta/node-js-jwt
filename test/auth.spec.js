@@ -1,5 +1,6 @@
 const request = require("supertest");
 const { hash } = require("bcryptjs");
+const { sign } = require("jsonwebtoken");
 
 // Constants.
 const { httpStatusCode, errorMessage } = require("../src/constants");
@@ -10,7 +11,11 @@ const User = require("../src/models/user");
 // App.
 const app = require("../src/app");
 
+// Configuration.
+const configuration = require("../src/configuration");
+
 describe("Auth", () => {
+
   describe("POST /auth/sign-in", () => {
     beforeAll(async () => {
       await User.sync({ force: true });
@@ -46,6 +51,94 @@ describe("Auth", () => {
       const response = await request(app)
         .post("/auth/sign-in")
         .send({ username: "testuser", password: "Abcdef2!" });
+
+      expect(response.status).toBe(httpStatusCode.OK);
+      expect(response.body).toHaveProperty("accessToken");
+      expect(response.body).toHaveProperty("refreshToken");
+    });
+  });
+
+  describe("POST /auth/refresh", () => {
+
+    beforeAll(async () => {
+      await User.sync({ force: true });
+      await User.create({
+        id: 100,
+        username: "testuser",
+        password: await hash("Abcdef2!", 10),
+      });
+    });
+
+    afterAll(async () => {
+      await User.destroy({ where: {} });
+    });
+
+    it("Should return 401 status code and TOKEN_EXPIRED message if refresh token is expired", async () => {
+      const payload = { id: 1 };
+      const { secret } = configuration.jwt;
+      const options = {
+        algorithm: "HS512",
+        subject: "REFRESH_TOKEN",
+        expiresIn: "1ms",
+      };
+      const refreshToken = sign(payload, secret, options);
+
+      const response = await request(app)
+        .post("/auth/refresh")
+        .send({ refreshToken });
+
+      expect(response.status).toBe(httpStatusCode.UNAUTHORIZED);
+      expect(response.body.error).toBe(errorMessage.TOKEN_EXPIRED);
+    });
+
+    it("Should return 401 status code and INVALID_TOKEN message if refresh token is invalid", async () => {
+      const payload = { id: 1 };
+      const options = {
+        algorithm: "HS512",
+        subject: "REFRESH_TOKEN",
+        expiresIn: "7d",
+      };
+      const refreshToken = sign(payload, 'invalid-secret', options);
+
+      const response = await request(app)
+        .post("/auth/refresh")
+        .send({ refreshToken });
+
+      expect(response.status).toBe(httpStatusCode.UNAUTHORIZED);
+      expect(response.body.error).toBe(errorMessage.INVALID_TOKEN);
+    });
+
+    it("Should return 404 status code and USER_NOT_FOUND message if user does not exist", async () => {
+      const payload = { id: 99 };
+      const { secret, refreshTokenDuration } = configuration.jwt;
+      const options = {
+        algorithm: "HS512",
+        subject: "REFRESH_TOKEN",
+        expiresIn: refreshTokenDuration,
+      };
+      const refreshToken = sign(payload, secret, options);
+
+      const response = await request(app)
+        .post("/auth/refresh")
+        .send({ refreshToken });
+
+      expect(response.status).toBe(httpStatusCode.NOT_FOUND);
+      expect(response.body.error).toBe(errorMessage.USER_NOT_FOUND);
+    });
+
+    it("Should return 200 status code and new tokens if refresh token is valid and user exist", async () => {
+      const payload = { id: 100 };
+      const { secret, refreshTokenDuration } = configuration.jwt;
+      const options = {
+        algorithm: "HS512",
+        subject: "REFRESH_TOKEN",
+        expiresIn: refreshTokenDuration,
+      };
+      const refreshToken = sign(payload, secret, options);
+
+      const response = await request(app)
+        .post("/auth/refresh")
+        .send({ refreshToken });
 
       expect(response.status).toBe(httpStatusCode.OK);
       expect(response.body).toHaveProperty("accessToken");
