@@ -23,7 +23,7 @@ const User = sequelize.define('User', {
   },
 }, {
   underscored: true,
-  timestamps: false,
+  timestamps: true,
 });
 
 module.exports = User;
