@@ -24,6 +24,24 @@ const signIn = async (req, res) => {
   }
 };
 
+const signUp = async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    const result = await authService.signUp({ username, password });
+    res.send(result);
+  } catch (error) {
+    const { message } = error;
+    if (message === errorMessage.USER_ALREADY_EXIST) {
+      res.status(httpStatusCode.CONFLICT).send({ error: message });
+    } else {
+      console.error("signUp#error", error);
+      res
+        .status(httpStatusCode.INTERNAL_SERVER_ERROR)
+        .send({ error: errorMessage.INTERNAL_SERVER_ERROR });
+    }
+  }
+};
+
 const refresh = async (req, res) => {
   try {
     const { refreshToken } = req.body;
@@ -48,5 +66,6 @@ const refresh = async (req, res) => {
 
 module.exports = {
   signIn,
+  signUp,
   refresh,
 };

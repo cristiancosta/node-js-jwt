@@ -40,6 +40,13 @@ const signIn = async ({ username, password }) => {
   return { accessToken, refreshToken };
 };
 
+const signUp = async ({ username, password }) => {
+  const user = await userRepository.getUserByUsername(username.trim());
+  if (user) {
+    throw new Error(errorMessage.USER_ALREADY_EXIST);
+  }
+};
+
 const refresh = async ({ refreshToken }) => {
   const { secret } = configuration.jwt;
 
@@ -80,5 +87,6 @@ const refresh = async ({ refreshToken }) => {
 
 module.exports = {
   signIn,
+  signUp,
   refresh,
 };

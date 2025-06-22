@@ -17,6 +17,7 @@ const configuration = require("../src/configuration");
 describe("Auth", () => {
 
   describe("POST /auth/sign-in", () => {
+
     beforeAll(async () => {
       await User.sync({ force: true });
       await User.create({
@@ -55,6 +56,30 @@ describe("Auth", () => {
       expect(response.status).toBe(httpStatusCode.OK);
       expect(response.body).toHaveProperty("accessToken");
       expect(response.body).toHaveProperty("refreshToken");
+    });
+  });
+
+  describe("POST /auth/sign-up", () => {
+    beforeAll(async () => {
+      await User.sync({ force: true });
+      await User.create({
+        id: 50,
+        username: "testuser",
+        password: await hash("Abcdef2!", 10),
+      });
+    });
+
+    afterAll(async () => {
+      await User.destroy({ where: {} });
+    });
+
+    it("Should return 409 status code and USER_ALREADY_EXIST message if the given username was taken before", async () => {
+      const response = await request(app)
+        .post("/auth/sign-up")
+        .send({ username: "testuser", password: "Abcdef1!" });
+
+      expect(response.status).toBe(httpStatusCode.CONFLICT);
+      expect(response.body.error).toBe(errorMessage.USER_ALREADY_EXIST);
     });
   });
 
