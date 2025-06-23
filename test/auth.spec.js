@@ -3,32 +3,43 @@ const { sign } = require('jsonwebtoken');
 const { hashSync } = require('bcryptjs');
 
 // Constants.
-const { httpStatusCode, errorMessage } = require('../src/constants');
-
-// Models.
-const User = require('../src/models/user');
-
-// App.
-const app = require('../src/app');
+const { httpStatusCode, errorMessage, modelName } = require('../src/constants');
 
 // Configuration.
 const configuration = require('../src/configuration');
 
+// Setup.
+const { buildResources, teardownResources } = require('./setup');
+
+jest.setTimeout(30_000);
+
 describe('Auth', () => {
+  let context;
+
+  beforeAll(async () => {
+    context = await buildResources();
+  });
+
+  afterAll(async () => {
+    await teardownResources(context);
+  });
+
   describe('POST /auth/sign-in', () => {
-    beforeAll(async () => {
+    beforeEach(async () => {
+      const User = context.database.model(modelName.USER);
       await User.create({
         username: 'testuser',
         password: hashSync('Abcdef2!', 10)
       });
     });
 
-    afterAll(async () => {
+    afterEach(async () => {
+      const User = context.database.model(modelName.USER);
       await User.destroy({ where: {} });
     });
 
     it('Should return 404 status code and USER_NOT_FOUND message if user does not exist', async () => {
-      const response = await request(app)
+      const response = await request(context.app)
         .post('/auth/sign-in')
         .send({ username: 'nouser', password: 'Abcdef1!' });
 
@@ -37,7 +48,7 @@ describe('Auth', () => {
     });
 
     it('Should return 400 status code and INVALID_CREDENTIALS message if credentials are not valid', async () => {
-      const response = await request(app)
+      const response = await request(context.app)
         .post('/auth/sign-in')
         .send({ username: 'testuser', password: 'Abcdef1!' });
 
@@ -46,7 +57,7 @@ describe('Auth', () => {
     });
 
     it('Should return 200 status code and tokens if user exist and credentials are valid', async () => {
-      const response = await request(app)
+      const response = await request(context.app)
         .post('/auth/sign-in')
         .send({ username: 'testuser', password: 'Abcdef2!' });
 
@@ -57,7 +68,8 @@ describe('Auth', () => {
   });
 
   describe('POST /auth/sign-up', () => {
-    beforeAll(async () => {
+    beforeEach(async () => {
+      const User = context.database.model(modelName.USER);
       await User.create({
         id: 50,
         username: 'testuser',
@@ -65,12 +77,13 @@ describe('Auth', () => {
       });
     });
 
-    afterAll(async () => {
+    afterEach(async () => {
+      const User = context.database.model(modelName.USER);
       await User.destroy({ where: {} });
     });
 
     it('Should return 409 status code and USER_ALREADY_EXIST message if the given username was taken before', async () => {
-      const response = await request(app)
+      const response = await request(context.app)
         .post('/auth/sign-up')
         .send({ username: 'testuser', password: 'Abcdef1!' });
 
@@ -79,7 +92,7 @@ describe('Auth', () => {
     });
 
     it('Should return 200 status code and created user data', async () => {
-      const response = await request(app)
+      const response = await request(context.app)
         .post('/auth/sign-up')
         .send({ username: 'testuser2', password: 'Abcdef2!' });
 
@@ -92,7 +105,8 @@ describe('Auth', () => {
   });
 
   describe('POST /auth/refresh', () => {
-    beforeAll(async () => {
+    beforeEach(async () => {
+      const User = context.database.model(modelName.USER);
       await User.create({
         id: 100,
         username: 'testuser',
@@ -100,7 +114,8 @@ describe('Auth', () => {
       });
     });
 
-    afterAll(async () => {
+    afterEach(async () => {
+      const User = context.database.model(modelName.USER);
       await User.destroy({ where: {} });
     });
 
@@ -114,7 +129,7 @@ describe('Auth', () => {
       };
       const refreshToken = sign(payload, secret, options);
 
-      const response = await request(app)
+      const response = await request(context.app)
         .post('/auth/refresh')
         .send({ refreshToken });
 
@@ -131,7 +146,7 @@ describe('Auth', () => {
       };
       const refreshToken = sign(payload, 'invalid-secret', options);
 
-      const response = await request(app)
+      const response = await request(context.app)
         .post('/auth/refresh')
         .send({ refreshToken });
 
@@ -149,7 +164,7 @@ describe('Auth', () => {
       };
       const refreshToken = sign(payload, secret, options);
 
-      const response = await request(app)
+      const response = await request(context.app)
         .post('/auth/refresh')
         .send({ refreshToken });
 
@@ -167,7 +182,7 @@ describe('Auth', () => {
       };
       const refreshToken = sign(payload, secret, options);
 
-      const response = await request(app)
+      const response = await request(context.app)
         .post('/auth/refresh')
         .send({ refreshToken });
 

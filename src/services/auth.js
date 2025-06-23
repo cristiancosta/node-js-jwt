@@ -19,7 +19,6 @@ const ConflictError = require('../errors/conflict');
 const UnauthorizedError = require('../errors/unauthorized');
 
 const authService = (database) => {
-
   // Repositories.
   const userRepository = require('../repositories/user')(database);
 
@@ -32,22 +31,22 @@ const authService = (database) => {
     if (!isValidPassword) {
       throw new BadRequestError(errorMessage.INVALID_CREDENTIALS);
     }
-  
+
     const payload = { id: user.id };
     const { secret } = configuration.jwt;
     const options = { algorithm: 'HS512' };
-  
+
     options.subject = 'ACCESS_TOKEN';
     options.expiresIn = configuration.jwt.accessTokenDuration;
     const accessToken = sign(payload, secret, options);
-  
+
     options.subject = 'REFRESH_TOKEN';
     options.expiresIn = configuration.jwt.refreshTokenDuration;
     const refreshToken = sign(payload, secret, options);
-  
+
     return { accessToken, refreshToken };
   };
-  
+
   const signUp = async ({ username, password }) => {
     const user = await userRepository.getUserByUsername(username.trim());
     if (user) {
@@ -65,10 +64,10 @@ const authService = (database) => {
       updatedAt: createdUser.updatedAt
     };
   };
-  
+
   const refresh = async ({ refreshToken }) => {
     const { secret } = configuration.jwt;
-  
+
     let verifiedPayload;
     try {
       verifiedPayload = verify(refreshToken, secret);
@@ -80,7 +79,7 @@ const authService = (database) => {
         throw new UnauthorizedError(errorMessage.INVALID_TOKEN);
       }
     }
-  
+
     const { id } = verifiedPayload;
     const user = await userRepository.getUserById(id);
     if (!user) {
@@ -89,15 +88,15 @@ const authService = (database) => {
 
     const payload = { id: user.id };
     const options = { algorithm: 'HS512' };
-  
+
     options.subject = 'ACCESS_TOKEN';
     options.expiresIn = configuration.jwt.accessTokenDuration;
     const newAccessToken = sign(payload, secret, options);
-  
+
     options.subject = 'REFRESH_TOKEN';
     options.expiresIn = configuration.jwt.refreshTokenDuration;
     const newRefreshToken = sign(payload, secret, options);
-  
+
     return { accessToken: newAccessToken, refreshToken: newRefreshToken };
   };
 

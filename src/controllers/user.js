@@ -1,5 +1,4 @@
 const userController = (database) => {
-
   // Services.
   const userService = require('../services/user')(database);
 

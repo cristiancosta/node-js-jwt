@@ -5,7 +5,6 @@ const { errorMessage } = require('../constants');
 const NotFoundError = require('../errors/not-found');
 
 const userService = (database) => {
-
   // Repositories.
   const userRepository = require('../repositories/user')(database);
 

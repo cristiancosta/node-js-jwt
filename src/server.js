@@ -12,8 +12,9 @@ createDatabaseConnection(db)
   .sync()
   .then((sequelize) => {
     const { port } = configuration.server;
-    createExpressApp(sequelize)
-      .listen(port, () => console.log(`Server running on port ${port}`));
+    createExpressApp(sequelize).listen(port, () =>
+      console.log(`Server running on port ${port}`)
+    );
     console.log('Server connected to database');
   })
   .catch((error) =>
