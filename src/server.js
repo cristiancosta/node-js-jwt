@@ -1,20 +1,23 @@
 // App.
-const app = require('./app');
+const createExpressApp = require('./app');
 
 // Configuration.
 const configuration = require('./configuration');
 
 // Database.
-const sequelize = require('./sequelize');
+const createDatabaseConnection = require('./sequelize');
 
-sequelize
+const { db } = configuration;
+createDatabaseConnection(db)
   .sync()
-  .then(() => console.log('Server connected to database'))
+  .then((sequelize) => {
+    const { port } = configuration.server;
+    createExpressApp(sequelize)
+      .listen(port, () => console.log(`Server running on port ${port}`));
+    console.log('Server connected to database');
+  })
   .catch((error) =>
     console.log(
       `Server unable to connect to database: ${JSON.stringify(error)}`
     )
   );
-
-const { port } = configuration.server;
-app.listen(port, () => console.log(`Server running on port ${port}`));

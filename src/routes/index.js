@@ -1,11 +1,21 @@
 const express = require('express');
 
-// Routes.
-const authRoute = require('./auth');
-const healthRoute = require('./health');
-const userRoute = require('./user');
+const routes = (database) => {
+  const router = express.Router();
 
-const router = express.Router();
+  // Routes.
+  const authRoute = require('./auth')(database);
+  const healthRoute = require('./health');
+  const userRoute = require('./user')(database);
+
+  router.use('/auth', authRoute);
+  router.use('/health', healthRoute);
+  router.use('/user', userRoute);
+
+  return router;
+};
+
+module.exports = routes;
 
 /**
  * @swagger
@@ -71,8 +81,3 @@ const router = express.Router();
  *           description: Error message
  *           example: MISSING_AUTHORIZATION_HEADER_VALUE
  */
-router.use('/auth', authRoute);
-router.use('/health', healthRoute);
-router.use('/user', userRoute);
-
-module.exports = router;

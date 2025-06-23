@@ -1,17 +1,20 @@
 const { Sequelize } = require('sequelize');
 
-// Configuration.
-const configuration = require('./configuration');
+// Models.
+const initModels = require('./models');
 
-const { database, user, password, host, port } = configuration.db;
+const createDatabaseConnection = (dbConfig) => {
+  const { database, user, password, host, port } = dbConfig;
+  const sequelize = new Sequelize(database, user, password, {
+    host,
+    port,
+    dialect: 'postgres',
+    logging: false
+  });
 
-const sequelize = new Sequelize(database, user, password, {
-  host,
-  port,
-  dialect: 'postgres',
-  logging: false
-});
+  sequelize.authenticate();
+  initModels(sequelize);
+  return sequelize;
+};
 
-sequelize.authenticate();
-
-module.exports = sequelize;
+module.exports = createDatabaseConnection;
