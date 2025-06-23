@@ -15,6 +15,10 @@ const configuration = {
   },
   server: {
     port: parseInt(process.env.SERVER_PORT, 10) || 8080
+  },
+  swagger: {
+    user: process.env.SWAGGER_USERNAME || 'admin',
+    password: process.env.SWAGGER_PASSWORD || 'admin'
   }
 };
 
