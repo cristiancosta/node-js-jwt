@@ -1,16 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const swaggerUi = require('swagger-ui-express');
-const expressBasicAuth = require('express-basic-auth');
 
 // Swagger specification.
 const swaggerSpecification = require('./swagger');
 
-// Configuration.
-const configuration = require('./configuration');
-
 // Middlewares.
 const errorHandler = require('./middlewares/error-handler');
+const swaggerBasicAuth = require('./middlewares/swagger-basic-auth');
 
 const createExpressApp = (database) => {
   const app = express();
@@ -21,10 +18,7 @@ const createExpressApp = (database) => {
   app.use(bodyParser.json());
   app.use(
     '/api-docs',
-    expressBasicAuth({
-      users: { [configuration.swagger.user]: configuration.swagger.password },
-      challenge: true
-    }),
+    swaggerBasicAuth,
     swaggerUi.serve,
     swaggerUi.setup(swaggerSpecification)
   );
