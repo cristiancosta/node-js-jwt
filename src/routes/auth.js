@@ -65,6 +65,20 @@ const router = express.Router();
  *          type: string
  *          description: Error message
  *          example: USER_ALREADY_EXIST
+ *    InvalidTokenResponse:
+ *      type: object
+ *      properties:
+ *        message:
+ *          type: string
+ *          description: Error message
+ *          example: INVALID_TOKEN
+ *    TokenExpiredResponse:
+ *      type: object
+ *      properties:
+ *        message:
+ *          type: string
+ *          description: Error message
+ *          example: TOKEN_EXPIRED
  */
 
 /**
@@ -167,6 +181,53 @@ router.post('/sign-in', authController.signIn);
  */
 router.post('/sign-up', authController.signUp);
 
+/**
+ * @swagger
+ * /auth/refresh:
+ *  post:
+ *    summary: Refresh user tokens
+ *    description: Refresh user tokens
+ *    tags:
+ *      - Authentication
+ *    requestBody:
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              refreshToken:
+ *                type: string
+ *                description: Refresh token
+ *            required:
+ *              - refreshToken
+ *    responses:
+ *      200:
+ *        description: Created user
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/SignUpResponse'
+ *      401:
+ *        description: Unauthorized
+ *        content:
+ *          application/json:
+ *            schema:
+ *              oneOf:
+ *                - $ref: '#/components/schemas/InvalidTokenResponse'
+ *                - $ref: '#/components/schemas/TokenExpiredResponse'
+ *      404:
+ *        description: Not found
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/UserNotFoundResponse'
+ *      500:
+ *        description: Internal server error
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/InternalServerErrorResponse'
+ */
 router.post('/refresh', authController.refresh);
 
 module.exports = router;
