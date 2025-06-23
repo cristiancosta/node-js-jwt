@@ -12,6 +12,9 @@ const swaggerSpecification = require('./swagger');
 // Configuration.
 const configuration = require('./configuration');
 
+// Middlewares.
+const errorHandler = require('./middlewares/error-handler');
+
 const app = express();
 
 app.use(bodyParser.json());
@@ -25,5 +28,6 @@ app.use(
   swaggerUi.setup(swaggerSpecification)
 );
 app.use('/', routes);
+app.use(errorHandler);
 
 module.exports = app;

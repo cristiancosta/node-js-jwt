@@ -42,7 +42,7 @@ describe('User', () => {
         .set('authorization', `Bearer ${token}`);
 
       expect(response.status).toBe(httpStatusCode.NOT_FOUND);
-      expect(response.body.error).toBe(errorMessage.USER_NOT_FOUND);
+      expect(response.body.message).toBe(errorMessage.USER_NOT_FOUND);
     });
 
     it('Should return 200 status code and user information', async () => {

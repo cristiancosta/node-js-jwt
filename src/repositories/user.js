@@ -3,26 +3,47 @@ const { Op } = require('sequelize');
 // Models.
 const User = require('../models/user');
 
+// Errors.
+const InternalServerError = require('../errors/internal-server');
+
+// Constants.
+const { errorMessage } = require('../constants');
+
 const getUserByUsername = async (username) => {
-  const where = {
-    username: {
-      [Op.iLike]: username
-    }
-  };
-  const user = await User.findOne({ where });
-  const result = user ? mapUserModelToUserDto(user) : null;
-  return result;
+  try {
+    const where = {
+      username: {
+        [Op.iLike]: username
+      }
+    };
+    const user = await User.findOne({ where });
+    const result = user ? mapUserModelToUserDto(user) : null;
+    return result;
+  } catch (error) {
+    console.error('getUserByUsername#error', error);
+    throw new InternalServerError(errorMessage.USER_RETRIEVAL_FAILURE);
+  }
 };
 
 const createUser = async ({ username, password }) => {
-  const user = await User.create({ username, password });
-  return mapUserModelToUserDto(user);
+  try {
+    const user = await User.create({ username, password });
+    return mapUserModelToUserDto(user);
+  } catch (error) {
+    console.error('createUser#error', error);
+    throw new InternalServerError(errorMessage.USER_CREATION_FAILURE);
+  }
 };
 
 const getUserById = async (id) => {
-  const user = await User.findByPk(id);
-  const result = user ? mapUserModelToUserDto(user) : null;
-  return result;
+  try {
+    const user = await User.findByPk(id);
+    const result = user ? mapUserModelToUserDto(user) : null;
+    return result;
+  } catch (error) {
+    console.error('getUserById#error', error);
+    throw new InternalServerError(errorMessage.USER_RETRIEVAL_FAILURE);
+  }
 };
 
 const mapUserModelToUserDto = (userModel) => {

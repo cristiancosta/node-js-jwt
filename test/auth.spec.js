@@ -33,7 +33,7 @@ describe('Auth', () => {
         .send({ username: 'nouser', password: 'Abcdef1!' });
 
       expect(response.status).toBe(httpStatusCode.NOT_FOUND);
-      expect(response.body.error).toBe(errorMessage.USER_NOT_FOUND);
+      expect(response.body.message).toBe(errorMessage.USER_NOT_FOUND);
     });
 
     it('Should return 400 status code and INVALID_CREDENTIALS message if credentials are not valid', async () => {
@@ -42,7 +42,7 @@ describe('Auth', () => {
         .send({ username: 'testuser', password: 'Abcdef1!' });
 
       expect(response.status).toBe(httpStatusCode.BAD_REQUEST);
-      expect(response.body.error).toBe(errorMessage.INVALID_CREDENTIALS);
+      expect(response.body.message).toBe(errorMessage.INVALID_CREDENTIALS);
     });
 
     it('Should return 200 status code and tokens if user exist and credentials are valid', async () => {
@@ -75,7 +75,7 @@ describe('Auth', () => {
         .send({ username: 'testuser', password: 'Abcdef1!' });
 
       expect(response.status).toBe(httpStatusCode.CONFLICT);
-      expect(response.body.error).toBe(errorMessage.USER_ALREADY_EXIST);
+      expect(response.body.message).toBe(errorMessage.USER_ALREADY_EXIST);
     });
 
     it('Should return 200 status code and created user data', async () => {
@@ -119,7 +119,7 @@ describe('Auth', () => {
         .send({ refreshToken });
 
       expect(response.status).toBe(httpStatusCode.UNAUTHORIZED);
-      expect(response.body.error).toBe(errorMessage.TOKEN_EXPIRED);
+      expect(response.body.message).toBe(errorMessage.TOKEN_EXPIRED);
     });
 
     it('Should return 401 status code and INVALID_TOKEN message if refresh token is invalid', async () => {
@@ -136,7 +136,7 @@ describe('Auth', () => {
         .send({ refreshToken });
 
       expect(response.status).toBe(httpStatusCode.UNAUTHORIZED);
-      expect(response.body.error).toBe(errorMessage.INVALID_TOKEN);
+      expect(response.body.message).toBe(errorMessage.INVALID_TOKEN);
     });
 
     it('Should return 404 status code and USER_NOT_FOUND message if user does not exist', async () => {
@@ -154,7 +154,7 @@ describe('Auth', () => {
         .send({ refreshToken });
 
       expect(response.status).toBe(httpStatusCode.NOT_FOUND);
-      expect(response.body.error).toBe(errorMessage.USER_NOT_FOUND);
+      expect(response.body.message).toBe(errorMessage.USER_NOT_FOUND);
     });
 
     it('Should return 200 status code and new tokens if refresh token is valid and user exist', async () => {
