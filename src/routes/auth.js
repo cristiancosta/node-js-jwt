@@ -44,20 +44,6 @@ const router = express.Router();
  *          type: string
  *          description: Error message
  *          example: INVALID_CREDENTIALS
- *    UserNotFoundResponse:
- *      type: object
- *      properties:
- *        message:
- *          type: string
- *          description: Error message
- *          example: USER_NOT_FOUND
- *    InternalServerErrorResponse:
- *      type: object
- *      properties:
- *        message:
- *          type: string
- *          description: Error message
- *          example: INTERNAL_SERVER_ERROR
  *    UserAlreadyExistResponse:
  *      type: object
  *      properties:
@@ -65,20 +51,6 @@ const router = express.Router();
  *          type: string
  *          description: Error message
  *          example: USER_ALREADY_EXIST
- *    InvalidTokenResponse:
- *      type: object
- *      properties:
- *        message:
- *          type: string
- *          description: Error message
- *          example: INVALID_TOKEN
- *    TokenExpiredResponse:
- *      type: object
- *      properties:
- *        message:
- *          type: string
- *          description: Error message
- *          example: TOKEN_EXPIRED
  */
 
 /**

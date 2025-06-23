@@ -45,7 +45,7 @@ const authBearer = (req, res, next) => {
     } else {
       res
         .status(httpStatusCode.CONFLICT)
-        .send({ error: errorMessage.INVALID_PREFIX });
+        .send({ error: errorMessage.INVALID_AUTHORIZATION_PREFIX });
     }
   }
 };
