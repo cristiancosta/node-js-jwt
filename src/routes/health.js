@@ -1,10 +1,14 @@
 const express = require('express');
 
-// Controllers.
-const healthController = require('../controllers/health');
+const healthRoute = (database) => {
+  const router = express.Router();
 
-const router = express.Router();
+  // Controllers.
+  const healthController = require('../controllers/health')(database);
 
-router.get('/', healthController.getHealthCheck);
+  router.get('/', healthController.getHealthInfo);
 
-module.exports = router;
+  return router;
+};
+
+module.exports = healthRoute;

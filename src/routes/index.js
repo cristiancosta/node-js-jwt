@@ -5,7 +5,7 @@ const routes = (database) => {
 
   // Routes.
   const authRoute = require('./auth')(database);
-  const healthRoute = require('./health');
+  const healthRoute = require('./health')(database);
   const userRoute = require('./user')(database);
 
   router.use('/auth', authRoute);
