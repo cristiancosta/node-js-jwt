@@ -46,6 +46,21 @@ const userRepository = (database) => {
     }
   };
 
+  const getUserByIdAndGeneratedRefreshToken = async (
+    id,
+    generatedRefreshToken
+  ) => {
+    try {
+      const where = { id, generated_refresh_token: generatedRefreshToken };
+      const user = await User.findOne({ where });
+      const result = user ? mapUserModelToUserDto(user) : null;
+      return result;
+    } catch (error) {
+      console.error('getUserByIdAndGeneratedRefreshToken#error', error);
+      throw new InternalServerError(errorMessage.USER_RETRIEVAL_FAILURE);
+    }
+  };
+
   const setGeneratedRefreshToken = async (id, refreshToken) => {
     try {
       await User.update(
@@ -77,6 +92,7 @@ const userRepository = (database) => {
     getUserByUsername,
     createUser,
     getUserById,
+    getUserByIdAndGeneratedRefreshToken,
     setGeneratedRefreshToken
   };
 };

@@ -1,5 +1,6 @@
 const request = require('supertest');
 const { Op } = require('sequelize');
+const { v4: uuidv4 } = require('uuid');
 const { sign } = require('jsonwebtoken');
 const { hashSync } = require('bcryptjs');
 
@@ -118,8 +119,10 @@ describe('Auth', () => {
   });
 
   describe('POST /auth/refresh', () => {
+    let User;
+
     beforeEach(async () => {
-      const User = context.database.model(modelName.USER);
+      User = context.database.model(modelName.USER);
       await User.create({
         id: 100,
         username: 'testuser',
@@ -128,7 +131,7 @@ describe('Auth', () => {
     });
 
     afterEach(async () => {
-      const User = context.database.model(modelName.USER);
+      User = context.database.model(modelName.USER);
       await User.destroy({ where: {} });
     });
 
@@ -167,8 +170,8 @@ describe('Auth', () => {
       expect(response.body.message).toBe(errorMessage.INVALID_TOKEN);
     });
 
-    it('Should return 404 status code and USER_NOT_FOUND message if user does not exist', async () => {
-      const payload = { id: 99 };
+    it('Should return 401 status code and INVALID_USER_TOKEN message if refresh token does not belong to user', async () => {
+      const payload = { id: 1 };
       const { secret, refreshTokenDuration } = configuration.jwt;
       const options = {
         algorithm: 'HS512',
@@ -176,17 +179,25 @@ describe('Auth', () => {
         expiresIn: refreshTokenDuration
       };
       const refreshToken = sign(payload, secret, options);
+      await User.update(
+        { generated_refresh_token: refreshToken },
+        {
+          where: {
+            id: 100
+          }
+        }
+      );
 
       const response = await request(context.app)
         .post('/auth/refresh')
         .send({ refreshToken });
 
-      expect(response.status).toBe(httpStatusCode.NOT_FOUND);
-      expect(response.body.message).toBe(errorMessage.USER_NOT_FOUND);
+      expect(response.status).toBe(httpStatusCode.UNAUTHORIZED);
+      expect(response.body.message).toBe(errorMessage.INVALID_USER_TOKEN);
     });
 
     it('Should return 200 status code and new tokens if refresh token is valid and user exist', async () => {
-      const payload = { id: 100 };
+      const payload = { id: 100, uuid: uuidv4() };
       const { secret, refreshTokenDuration } = configuration.jwt;
       const options = {
         algorithm: 'HS512',
@@ -194,6 +205,10 @@ describe('Auth', () => {
         expiresIn: refreshTokenDuration
       };
       const refreshToken = sign(payload, secret, options);
+      await User.update(
+        { generated_refresh_token: refreshToken },
+        { where: { id: payload.id } }
+      );
 
       const response = await request(context.app)
         .post('/auth/refresh')
@@ -202,6 +217,9 @@ describe('Auth', () => {
       expect(response.status).toBe(httpStatusCode.OK);
       expect(response.body).toHaveProperty('accessToken');
       expect(response.body).toHaveProperty('refreshToken');
+      const { generated_refresh_token } = await User.findByPk(payload.id);
+      expect(refreshToken).not.toEqual(generated_refresh_token);
+      expect(response.body.refreshToken).toEqual(generated_refresh_token);
     });
   });
 });

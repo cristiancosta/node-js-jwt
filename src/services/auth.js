@@ -1,3 +1,4 @@
+const { v4: uuidv4 } = require('uuid');
 const { compareSync, hashSync } = require('bcryptjs');
 const {
   sign,
@@ -31,21 +32,9 @@ const authService = (database) => {
     if (!isValidPassword) {
       throw new BadRequestError(errorMessage.INVALID_CREDENTIALS);
     }
-
-    const payload = { id: user.id };
-    const { secret } = configuration.jwt;
-    const options = { algorithm: 'HS512' };
-
-    options.subject = 'ACCESS_TOKEN';
-    options.expiresIn = configuration.jwt.accessTokenDuration;
-    const accessToken = sign(payload, secret, options);
-
-    options.subject = 'REFRESH_TOKEN';
-    options.expiresIn = configuration.jwt.refreshTokenDuration;
-    const refreshToken = sign(payload, secret, options);
-
+    const accessToken = generateAccessToken(user);
+    const refreshToken = generateRefreshToken(user);
     await userRepository.setGeneratedRefreshToken(user.id, refreshToken);
-
     return { accessToken, refreshToken };
   };
 
@@ -69,7 +58,6 @@ const authService = (database) => {
 
   const refresh = async ({ refreshToken }) => {
     const { secret } = configuration.jwt;
-
     let verifiedPayload;
     try {
       verifiedPayload = verify(refreshToken, secret);
@@ -81,25 +69,42 @@ const authService = (database) => {
         throw new UnauthorizedError(errorMessage.INVALID_TOKEN);
       }
     }
-
     const { id } = verifiedPayload;
-    const user = await userRepository.getUserById(id);
+    const user = await userRepository.getUserByIdAndGeneratedRefreshToken(
+      id,
+      refreshToken
+    );
     if (!user) {
-      throw new NotFoundError(errorMessage.USER_NOT_FOUND);
+      throw new UnauthorizedError(errorMessage.INVALID_USER_TOKEN);
     }
-
-    const payload = { id: user.id };
-    const options = { algorithm: 'HS512' };
-
-    options.subject = 'ACCESS_TOKEN';
-    options.expiresIn = configuration.jwt.accessTokenDuration;
-    const newAccessToken = sign(payload, secret, options);
-
-    options.subject = 'REFRESH_TOKEN';
-    options.expiresIn = configuration.jwt.refreshTokenDuration;
-    const newRefreshToken = sign(payload, secret, options);
-
+    const newAccessToken = generateAccessToken(user);
+    const newRefreshToken = generateRefreshToken(user);
+    await userRepository.setGeneratedRefreshToken(user.id, newRefreshToken);
     return { accessToken: newAccessToken, refreshToken: newRefreshToken };
+  };
+
+  const generateAccessToken = (user) => {
+    const { secret, accessTokenDuration } = configuration.jwt;
+    const payload = { id: user.id };
+    const options = {
+      algorithm: 'HS512',
+      subject: 'ACCESS_TOKEN',
+      expiresIn: accessTokenDuration
+    };
+    const token = sign(payload, secret, options);
+    return token;
+  };
+
+  const generateRefreshToken = (user) => {
+    const { secret, refreshTokenDuration } = configuration.jwt;
+    const payload = { id: user.id, uuid: uuidv4() };
+    const options = {
+      algorithm: 'HS512',
+      subject: 'REFRESH_TOKEN',
+      expiresIn: refreshTokenDuration
+    };
+    const token = sign(payload, secret, options);
+    return token;
   };
 
   return {

@@ -25,7 +25,7 @@ const initUserModel = (sequelize) =>
         allowNull: false
       },
       generated_refresh_token: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: true
       }
     },
