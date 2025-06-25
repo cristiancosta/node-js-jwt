@@ -24,8 +24,8 @@ const initUserModel = (sequelize) =>
         type: DataTypes.STRING,
         allowNull: false
       },
-      generated_refresh_token: {
-        type: DataTypes.TEXT,
+      refresh_uuid: {
+        type: DataTypes.STRING,
         allowNull: true
       }
     },

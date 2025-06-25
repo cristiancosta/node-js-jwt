@@ -5,13 +5,19 @@ const { sign } = require('jsonwebtoken');
 const { hashSync } = require('bcryptjs');
 
 // Constants.
-const { httpStatusCode, errorMessage, modelName } = require('../src/constants');
+const {
+  httpStatusCode,
+  errorMessage,
+  modelName,
+  tokenSubject
+} = require('../src/constants');
 
 // Configuration.
 const configuration = require('../src/configuration');
 
 // Setup.
 const { buildResources, teardownResources } = require('./setup');
+const { createJwt } = require('../src/utils');
 
 jest.setTimeout(30_000);
 
@@ -76,8 +82,12 @@ describe('Auth', () => {
           [Op.iLike]: username
         }
       };
-      const { generated_refresh_token } = await User.findOne({ where });
-      expect(response.body.refreshToken).toEqual(generated_refresh_token);
+      const { id, refresh_uuid } = await User.findOne({ where });
+      const refreshToken = createJwt(tokenSubject.REFRESH_TOKEN, {
+        id,
+        uuid: refresh_uuid
+      });
+      expect(response.body.refreshToken).toEqual(refreshToken);
     });
   });
 
@@ -171,22 +181,10 @@ describe('Auth', () => {
     });
 
     it('Should return 401 status code and INVALID_USER_TOKEN message if refresh token does not belong to user', async () => {
-      const payload = { id: 1 };
-      const { secret, refreshTokenDuration } = configuration.jwt;
-      const options = {
-        algorithm: 'HS512',
-        subject: 'REFRESH_TOKEN',
-        expiresIn: refreshTokenDuration
-      };
-      const refreshToken = sign(payload, secret, options);
-      await User.update(
-        { generated_refresh_token: refreshToken },
-        {
-          where: {
-            id: 100
-          }
-        }
-      );
+      const uuid = uuidv4();
+      const payload = { id: 1, uuid };
+      const refreshToken = createJwt(tokenSubject.REFRESH_TOKEN, payload);
+      await User.update({ refresh_uuid: uuid }, { where: { id: 100 } });
 
       const response = await request(context.app)
         .post('/auth/refresh')
@@ -198,15 +196,9 @@ describe('Auth', () => {
 
     it('Should return 200 status code and new tokens if refresh token is valid and user exist', async () => {
       const payload = { id: 100, uuid: uuidv4() };
-      const { secret, refreshTokenDuration } = configuration.jwt;
-      const options = {
-        algorithm: 'HS512',
-        subject: 'REFRESH_TOKEN',
-        expiresIn: refreshTokenDuration
-      };
-      const refreshToken = sign(payload, secret, options);
+      const refreshToken = createJwt(tokenSubject.REFRESH_TOKEN, payload);
       await User.update(
-        { generated_refresh_token: refreshToken },
+        { refresh_uuid: payload.uuid },
         { where: { id: payload.id } }
       );
 
@@ -217,9 +209,14 @@ describe('Auth', () => {
       expect(response.status).toBe(httpStatusCode.OK);
       expect(response.body).toHaveProperty('accessToken');
       expect(response.body).toHaveProperty('refreshToken');
-      const { generated_refresh_token } = await User.findByPk(payload.id);
-      expect(refreshToken).not.toEqual(generated_refresh_token);
-      expect(response.body.refreshToken).toEqual(generated_refresh_token);
+      expect(response.body.refreshToken).not.toEqual(refreshToken);
+      const { refresh_uuid } = await User.findByPk(payload.id);
+      expect(payload.uuid).not.toEqual(refresh_uuid);
+      const newRefreshToken = createJwt(tokenSubject.REFRESH_TOKEN, {
+        id: payload.id,
+        uuid: refresh_uuid
+      });
+      expect(response.body.refreshToken).toEqual(newRefreshToken);
     });
   });
 });

@@ -46,33 +46,23 @@ const userRepository = (database) => {
     }
   };
 
-  const getUserByIdAndGeneratedRefreshToken = async (
-    id,
-    generatedRefreshToken
-  ) => {
+  const getUserByIdAndRefreshUuid = async (id, refreshUuid) => {
     try {
-      const where = { id, generated_refresh_token: generatedRefreshToken };
+      const where = { id, refresh_uuid: refreshUuid };
       const user = await User.findOne({ where });
       const result = user ? mapUserModelToUserDto(user) : null;
       return result;
     } catch (error) {
-      console.error('getUserByIdAndGeneratedRefreshToken#error', error);
+      console.error('getUserByIdAndRefreshUuid#error', error);
       throw new InternalServerError(errorMessage.USER_RETRIEVAL_FAILURE);
     }
   };
 
-  const setGeneratedRefreshToken = async (id, refreshToken) => {
+  const updateRefreshUuid = async (id, refreshUuid) => {
     try {
-      await User.update(
-        { generated_refresh_token: refreshToken },
-        {
-          where: {
-            id
-          }
-        }
-      );
+      await User.update({ refresh_uuid: refreshUuid }, { where: { id } });
     } catch (error) {
-      console.error('setGeneratedRefreshToken#error', error);
+      console.error('updateRefreshUuid#error', error);
       throw new InternalServerError(errorMessage.USER_UPDATE_FAILURE);
     }
   };
@@ -92,8 +82,8 @@ const userRepository = (database) => {
     getUserByUsername,
     createUser,
     getUserById,
-    getUserByIdAndGeneratedRefreshToken,
-    setGeneratedRefreshToken
+    getUserByIdAndRefreshUuid,
+    updateRefreshUuid
   };
 };
 
