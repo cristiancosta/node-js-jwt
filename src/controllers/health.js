@@ -9,8 +9,10 @@ const healthController = (database) => {
     try {
       await database.authenticate();
     } catch (error) {
-      console.error('getHealthInfo#error', error);
-      result.dependencies = { database: 'not-connected' };
+      result.dependencies = {
+        database: 'not-connected',
+        reason: JSON.stringify(error)
+      };
     }
     res.send(result);
   };
