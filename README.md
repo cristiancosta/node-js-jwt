@@ -5,6 +5,7 @@
 
 ## 🧰 Stack
 
+[![JavaScript](https://img.shields.io/badge/language-JavaScript-yellow?logo=javascript)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 [![Node.js](https://img.shields.io/badge/Node.js-18%2B-green?logo=node.js)](https://nodejs.org/)
 [![Express](https://img.shields.io/badge/Express.js-5.x-black?logo=express)](https://expressjs.com/)
 [![JWT](https://img.shields.io/badge/JWT-secure-blue?logo=jsonwebtokens)](https://jwt.io/)
@@ -22,7 +23,7 @@
 
 ## 🔐 Introduction
 
-This is a REST API built with Node.js and Express that implements secure authentication using **JSON Web Tokens (JWT)**. It's a great base for systems that require login, user management, and access control via tokens.
+This is a REST API built with **JavaScript**, **Node.js** and **Express** that implements secure authentication using **JSON Web Tokens (JWT)**. It's a great base for systems that require login, user management, and access control via tokens.
 
 Features include:
 
