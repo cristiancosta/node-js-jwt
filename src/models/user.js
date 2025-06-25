@@ -23,6 +23,10 @@ const initUserModel = (sequelize) =>
       password: {
         type: DataTypes.STRING,
         allowNull: false
+      },
+      generated_refresh_token: {
+        type: DataTypes.STRING,
+        allowNull: true
       }
     },
     {

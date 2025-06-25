@@ -46,6 +46,22 @@ const userRepository = (database) => {
     }
   };
 
+  const setGeneratedRefreshToken = async (id, refreshToken) => {
+    try {
+      await User.update(
+        { generated_refresh_token: refreshToken },
+        {
+          where: {
+            id
+          }
+        }
+      );
+    } catch (error) {
+      console.error('setGeneratedRefreshToken#error', error);
+      throw new InternalServerError(errorMessage.USER_UPDATE_FAILURE);
+    }
+  };
+
   const mapUserModelToUserDto = (userModel) => {
     const userDto = {
       id: userModel.id,
@@ -60,7 +76,8 @@ const userRepository = (database) => {
   return {
     getUserByUsername,
     createUser,
-    getUserById
+    getUserById,
+    setGeneratedRefreshToken
   };
 };
 

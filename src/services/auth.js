@@ -44,6 +44,8 @@ const authService = (database) => {
     options.expiresIn = configuration.jwt.refreshTokenDuration;
     const refreshToken = sign(payload, secret, options);
 
+    await userRepository.setGeneratedRefreshToken(user.id, refreshToken);
+
     return { accessToken, refreshToken };
   };
 

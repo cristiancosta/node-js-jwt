@@ -1,4 +1,5 @@
 const request = require('supertest');
+const { Op } = require('sequelize');
 const { sign } = require('jsonwebtoken');
 const { hashSync } = require('bcryptjs');
 
@@ -25,8 +26,10 @@ describe('Auth', () => {
   });
 
   describe('POST /auth/sign-in', () => {
+    let User;
+
     beforeEach(async () => {
-      const User = context.database.model(modelName.USER);
+      User = context.database.model(modelName.USER);
       await User.create({
         username: 'testuser',
         password: hashSync('Abcdef2!', 10)
@@ -34,7 +37,7 @@ describe('Auth', () => {
     });
 
     afterEach(async () => {
-      const User = context.database.model(modelName.USER);
+      User = context.database.model(modelName.USER);
       await User.destroy({ where: {} });
     });
 
@@ -57,13 +60,23 @@ describe('Auth', () => {
     });
 
     it('Should return 200 status code and tokens if user exist and credentials are valid', async () => {
+      const username = 'testuser';
+      const password = 'Abcdef2!';
       const response = await request(context.app)
         .post('/auth/sign-in')
-        .send({ username: 'testuser', password: 'Abcdef2!' });
+        .send({ username, password });
 
       expect(response.status).toBe(httpStatusCode.OK);
       expect(response.body).toHaveProperty('accessToken');
       expect(response.body).toHaveProperty('refreshToken');
+
+      const where = {
+        username: {
+          [Op.iLike]: username
+        }
+      };
+      const { generated_refresh_token } = await User.findOne({ where });
+      expect(response.body.refreshToken).toEqual(generated_refresh_token);
     });
   });
 
