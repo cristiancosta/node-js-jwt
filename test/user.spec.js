@@ -1,11 +1,15 @@
 const request = require('supertest');
-const { sign } = require('jsonwebtoken');
 
 // Constants.
-const { httpStatusCode, errorMessage, modelName } = require('../src/constants');
+const {
+  httpStatusCode,
+  errorMessage,
+  modelName,
+  tokenSubject
+} = require('../src/constants');
 
-// Configuration.
-const configuration = require('../src/configuration');
+// Utils.
+const { createJwt } = require('../src/utils');
 
 // Setup.
 const { buildResources, teardownResources } = require('./setup');
@@ -25,13 +29,7 @@ describe('User', () => {
 
   describe('GET /user/:id', () => {
     const payload = { id: 1 };
-    const { secret, accessTokenDuration } = configuration.jwt;
-    const options = {
-      algorithm: 'HS512',
-      subject: 'ACCESS_TOKEN',
-      expiresIn: accessTokenDuration
-    };
-    const token = sign(payload, secret, options);
+    const accessToken = createJwt(tokenSubject.ACCESS_TOKEN, payload);
 
     beforeEach(async () => {
       const User = context.database.model(modelName.USER);
@@ -50,7 +48,7 @@ describe('User', () => {
     it('Should return 404 status code and USER_NOT_FOUND message if user does not exist', async () => {
       const response = await request(context.app)
         .get('/user/2')
-        .set('authorization', `Bearer ${token}`);
+        .set('authorization', `Bearer ${accessToken}`);
 
       expect(response.status).toBe(httpStatusCode.NOT_FOUND);
       expect(response.body.message).toBe(errorMessage.USER_NOT_FOUND);
@@ -59,7 +57,7 @@ describe('User', () => {
     it('Should return 200 status code and user information', async () => {
       const response = await request(context.app)
         .get('/user/1')
-        .set('authorization', `Bearer ${token}`);
+        .set('authorization', `Bearer ${accessToken}`);
 
       expect(response.status).toBe(httpStatusCode.OK);
       expect(response.body).toHaveProperty('id');

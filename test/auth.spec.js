@@ -15,9 +15,11 @@ const {
 // Configuration.
 const configuration = require('../src/configuration');
 
+// Utils.
+const { createJwt } = require('../src/utils');
+
 // Setup.
 const { buildResources, teardownResources } = require('./setup');
-const { createJwt } = require('../src/utils');
 
 jest.setTimeout(30_000);
 
@@ -180,6 +182,18 @@ describe('Auth', () => {
       expect(response.body.message).toBe(errorMessage.INVALID_TOKEN);
     });
 
+    it('Should return 401 status code and INVALID_TOKEN_SUBJECT message if refresh token has invalid subject', async () => {
+      const payload = { id: 1 };
+      const accessToken = createJwt(tokenSubject.ACCESS_TOKEN, payload);
+
+      const response = await request(context.app)
+        .post('/auth/refresh')
+        .send({ refreshToken: accessToken });
+
+      expect(response.status).toBe(httpStatusCode.UNAUTHORIZED);
+      expect(response.body.message).toBe(errorMessage.INVALID_TOKEN_SUBJECT);
+    });
+
     it('Should return 401 status code and INVALID_USER_TOKEN message if refresh token does not belong to user', async () => {
       const uuid = uuidv4();
       const payload = { id: 1, uuid };
@@ -194,7 +208,7 @@ describe('Auth', () => {
       expect(response.body.message).toBe(errorMessage.INVALID_USER_TOKEN);
     });
 
-    it('Should return 200 status code and new tokens if refresh token is valid and user exist', async () => {
+    it('Should return 200 status code and new tokens if refresh token has valid subject, valid content and user exist', async () => {
       const payload = { id: 100, uuid: uuidv4() };
       const refreshToken = createJwt(tokenSubject.REFRESH_TOKEN, payload);
       await User.update(
