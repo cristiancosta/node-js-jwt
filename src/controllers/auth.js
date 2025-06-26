@@ -1,6 +1,9 @@
 const authController = (database) => {
+  // Repositories.
+  const userRepository = require('../repositories/user')(database);
+
   // Services.
-  const authService = require('../services/auth')(database);
+  const authService = require('../services/auth')({ userRepository });
 
   const signIn = async (req, res) => {
     const { username, password } = req.body;

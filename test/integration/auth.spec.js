@@ -1,5 +1,4 @@
 const request = require('supertest');
-const { Op } = require('sequelize');
 const { v4: uuidv4 } = require('uuid');
 const { sign } = require('jsonwebtoken');
 const { hashSync } = require('bcryptjs');
@@ -16,7 +15,7 @@ const {
 const configuration = require('../../src/configuration');
 
 // Utils.
-const { createJwt } = require('../../src/utils');
+const { createJwt, verifyJwt } = require('../../src/utils');
 
 // Setup.
 const { buildResources, teardownResources } = require('./setup');
@@ -79,17 +78,21 @@ describe('Auth', () => {
       expect(response.body).toHaveProperty('accessToken');
       expect(response.body).toHaveProperty('refreshToken');
 
-      const where = {
-        username: {
-          [Op.iLike]: username
-        }
-      };
-      const { id, refresh_uuid } = await User.findOne({ where });
-      const refreshToken = createJwt(tokenSubject.REFRESH_TOKEN, {
-        id,
-        uuid: refresh_uuid
-      });
-      expect(response.body.refreshToken).toEqual(refreshToken);
+      const { accessToken, refreshToken } = response.body;
+      const verifiedAccessTokenJwt = verifyJwt(
+        accessToken,
+        tokenSubject.ACCESS_TOKEN
+      );
+      const verifiedRefreshTokenJwt = verifyJwt(
+        refreshToken,
+        tokenSubject.REFRESH_TOKEN
+      );
+      expect(verifiedAccessTokenJwt).toHaveProperty('id');
+      expect(verifiedRefreshTokenJwt).toHaveProperty('id');
+      expect(verifiedRefreshTokenJwt).toHaveProperty('uuid');
+
+      const { refresh_uuid } = await User.findOne({ where: { username } });
+      expect(verifiedRefreshTokenJwt.uuid).toEqual(refresh_uuid);
     });
   });
 

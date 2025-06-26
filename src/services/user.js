@@ -4,10 +4,7 @@ const { errorMessage } = require('../constants');
 // Errors.
 const NotFoundError = require('../errors/not-found');
 
-const userService = (database) => {
-  // Repositories.
-  const userRepository = require('../repositories/user')(database);
-
+const userService = ({ userRepository }) => {
   const getUser = async ({ id }) => {
     const user = await userRepository.getUserById(id);
     if (!user) {

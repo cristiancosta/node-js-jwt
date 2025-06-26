@@ -1,6 +1,9 @@
 const userController = (database) => {
+  // Repositories.
+  const userRepository = require('../repositories/user')(database);
+
   // Services.
-  const userService = require('../services/user')(database);
+  const userService = require('../services/user')({ userRepository });
 
   const getUser = async (req, res) => {
     const { id } = req.params;

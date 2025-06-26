@@ -28,10 +28,10 @@ This is a REST API built with **JavaScript**, **Node.js** and **Express** that i
 Features include:
 
 - 🔒 Authentication with **Access Token** and **Refresh Token**.
-- 📖 Interactive API documentation via Swagger UI.
-- 🧪 Real PostgreSQL integration testing using Testcontainers.
-- ✨ ESLint + Prettier + Husky for code quality enforcement.
-- 🔁 GitHub Actions for automated CI/CD.
+- 📖 Interactive API documentation via **Swagger UI**.
+- 🧪 Real **PostgreSQL** integration testing using **Testcontainers**.
+- ✨ **ESLint** + **Prettier** + **Husky** for code quality enforcement.
+- 🔁 **GitHub Actions** for automated CI/CD.
 
 ---
 
@@ -41,24 +41,28 @@ Features include:
 ├── .github/
 ├── .husky/
 ├── src/
-|   ├── constants/      # HTTP codes, error messages, table/model names
-|   ├── controllers/    # Endpoint logic
-|   ├── errors/         # Custom error classes
-|   ├── middlewares/    # Auth, error handling, swagger auth
-|   ├── models/         # Sequelize models
-|   ├── repositories/   # Data access abstraction
-|   ├── routes/         # Route definitions
-|   ├── services/       # Business logic
-|   ├── swagger.js      # Swagger configuration
-|   └── server.js       # Entry point
-├── test/               # Jest + Supertest tests
-├── .gitignore          # Default gitignore file provided by GitHub.
-├── .prettierrc         # Prettier configuration file.
-├── eslint.config.mjs   # ESLint configuration file.
-├── LICENSE             # MIT License.
-├── package-lock.json   # Exact project dependencies tree.
-├── package.json        # Project dependencies, scripts and more stuff.
-└── README.md           # Current file.
+|   ├── constants/          # HTTP codes, error messages, table/model names.
+|   ├── controllers/        # Endpoint logic.
+|   ├── errors/             # Custom error classes.
+|   ├── middlewares/        # Auth, error handling, swagger auth.
+|   ├── models/             # Sequelize models.
+|   ├── repositories/       # Data access abstraction.
+|   ├── routes/             # Route definitions.
+|   ├── services/           # Business logic.
+|   ├── utils/              # Reusable functions.
+|   ├── app.js              # Express app configuration.
+|   ├── configuration.js    # .env configuration entry point.
+|   ├── sequelize.js        # Sequelize configuration.
+|   ├── swagger.js          # Swagger configuration.
+|   └── server.js           # Entry point.
+├── test/                   # Unit and integration tests using jest, supertest and testcontainers.
+├── .gitignore              # Default gitignore file provided by GitHub.
+├── .prettierrc             # Prettier configuration file.
+├── eslint.config.mjs       # ESLint configuration file.
+├── LICENSE                 # MIT License.
+├── package-lock.json       # Exact project dependencies tree.
+├── package.json            # Project dependencies, scripts and more stuff.
+└── README.md               # Current file.
 ```
 
 ---

@@ -13,10 +13,7 @@ const UnauthorizedError = require('../errors/unauthorized');
 // Utils.
 const { createJwt, verifyJwt } = require('../utils');
 
-const authService = (database) => {
-  // Repositories.
-  const userRepository = require('../repositories/user')(database);
-
+const authService = ({ userRepository }) => {
   const signIn = async ({ username, password }) => {
     const user = await userRepository.getUserByUsername(username.trim());
     if (!user) {
