@@ -1,7 +1,7 @@
 const express = require('express');
 
 // Middlewares.
-const authBearer = require('../middlewares/auth-bearer');
+const { authBearer } = require('../middlewares');
 
 const userRoute = (database) => {
   const router = express.Router();

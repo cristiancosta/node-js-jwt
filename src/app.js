@@ -6,8 +6,7 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerSpecification = require('./swagger');
 
 // Middlewares.
-const errorHandler = require('./middlewares/error-handler');
-const swaggerBasicAuth = require('./middlewares/swagger-basic-auth');
+const { errorHandler, swaggerBasicAuth } = require('./middlewares');
 
 const createExpressApp = (database) => {
   const app = express();

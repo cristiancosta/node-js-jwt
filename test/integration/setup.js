@@ -1,10 +1,10 @@
 const { PostgreSqlContainer } = require('@testcontainers/postgresql');
 
 // Database.
-const createDatabaseConnection = require('../src/sequelize');
+const createDatabaseConnection = require('../../src/sequelize');
 
 // App.
-const createExpressApp = require('../src/app');
+const createExpressApp = require('../../src/app');
 
 const buildResources = async () => {
   const container = await new PostgreSqlContainer('postgres')

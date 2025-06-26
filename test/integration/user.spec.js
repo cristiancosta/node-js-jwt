@@ -6,10 +6,10 @@ const {
   errorMessage,
   modelName,
   tokenSubject
-} = require('../src/constants');
+} = require('../../src/constants');
 
 // Utils.
-const { createJwt } = require('../src/utils');
+const { createJwt } = require('../../src/utils');
 
 // Setup.
 const { buildResources, teardownResources } = require('./setup');
