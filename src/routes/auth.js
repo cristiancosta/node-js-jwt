@@ -139,6 +139,7 @@ const authRoute = (database) => {
    *            schema:
    *              oneOf:
    *                - $ref: '#/components/schemas/InvalidTokenResponse'
+   *                - $ref: '#/components/schemas/InvalidTokenSubjectResponse'
    *                - $ref: '#/components/schemas/TokenExpiredResponse'
    *                - $ref: '#/components/schemas/InvalidUserTokenResponse'
    *      500:

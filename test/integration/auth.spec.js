@@ -1,7 +1,7 @@
 const request = require('supertest');
 const { v4: uuidv4 } = require('uuid');
 const { sign } = require('jsonwebtoken');
-const { hashSync } = require('bcryptjs');
+const { compareSync, hashSync } = require('bcryptjs');
 
 // Constants.
 const {
@@ -91,14 +91,16 @@ describe('Auth', () => {
       expect(verifiedRefreshTokenJwt).toHaveProperty('id');
       expect(verifiedRefreshTokenJwt).toHaveProperty('uuid');
 
-      const { refresh_uuid } = await User.findOne({ where: { username } });
-      expect(verifiedRefreshTokenJwt.uuid).toEqual(refresh_uuid);
+      const dbUser = await User.findOne({ where: { username } });
+      expect(verifiedRefreshTokenJwt.uuid).toEqual(dbUser.refresh_uuid);
     });
   });
 
   describe('POST /auth/sign-up', () => {
+    let User;
+
     beforeEach(async () => {
-      const User = context.database.model(modelName.USER);
+      User = context.database.model(modelName.USER);
       await User.create({
         id: 50,
         username: 'testuser',
@@ -107,7 +109,7 @@ describe('Auth', () => {
     });
 
     afterEach(async () => {
-      const User = context.database.model(modelName.USER);
+      User = context.database.model(modelName.USER);
       await User.destroy({ where: {} });
     });
 
@@ -121,15 +123,23 @@ describe('Auth', () => {
     });
 
     it('Should return 200 status code and created user data', async () => {
+      const username = 'testuser2';
+      const password = 'Abcdef2!';
       const response = await request(context.app)
         .post('/auth/sign-up')
-        .send({ username: 'testuser2', password: 'Abcdef2!' });
+        .send({ username, password });
 
       expect(response.status).toBe(httpStatusCode.OK);
       expect(response.body).toHaveProperty('id');
       expect(response.body).toHaveProperty('username');
       expect(response.body).toHaveProperty('createdAt');
       expect(response.body).toHaveProperty('updatedAt');
+
+      const dbUser = await User.findOne({ where: { username } });
+      expect(dbUser).not.toBeNull();
+      expect(dbUser.username).toBe(username);
+      expect(dbUser.password).not.toBe(password);
+      expect(compareSync(password, dbUser.password)).toBe(true);
     });
   });
 
