@@ -1,6 +1,6 @@
-const userController = (database) => {
+const userController = (dataSource) => {
   // Repositories.
-  const userRepository = require('../repositories/user')(database);
+  const userRepository = require('../repositories/user')(dataSource);
 
   // Services.
   const userService = require('../services/user')({ userRepository });

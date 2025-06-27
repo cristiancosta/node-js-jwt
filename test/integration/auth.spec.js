@@ -20,24 +20,24 @@ const { createJwt, verifyJwt } = require('../../src/utils');
 // Setup.
 const { buildResources, teardownResources } = require('./setup');
 
-jest.setTimeout(30_000);
-
 describe('Auth', () => {
   let context;
 
   beforeAll(async () => {
     context = await buildResources();
-  });
+  }, 60_000);
 
   afterAll(async () => {
-    await teardownResources(context);
+    if (context) {
+      await teardownResources(context);
+    }
   });
 
   describe('POST /auth/sign-in', () => {
     let User;
 
     beforeEach(async () => {
-      User = context.database.model(modelName.USER);
+      User = context.dataSource.model(modelName.USER);
       await User.create({
         username: 'testuser',
         password: hashSync('Abcdef2!', 10)
@@ -45,7 +45,7 @@ describe('Auth', () => {
     });
 
     afterEach(async () => {
-      User = context.database.model(modelName.USER);
+      User = context.dataSource.model(modelName.USER);
       await User.destroy({ where: {} });
     });
 
@@ -100,7 +100,7 @@ describe('Auth', () => {
     let User;
 
     beforeEach(async () => {
-      User = context.database.model(modelName.USER);
+      User = context.dataSource.model(modelName.USER);
       await User.create({
         id: 50,
         username: 'testuser',
@@ -109,7 +109,7 @@ describe('Auth', () => {
     });
 
     afterEach(async () => {
-      User = context.database.model(modelName.USER);
+      User = context.dataSource.model(modelName.USER);
       await User.destroy({ where: {} });
     });
 
@@ -147,7 +147,7 @@ describe('Auth', () => {
     let User;
 
     beforeEach(async () => {
-      User = context.database.model(modelName.USER);
+      User = context.dataSource.model(modelName.USER);
       await User.create({
         id: 100,
         username: 'testuser',
@@ -156,7 +156,7 @@ describe('Auth', () => {
     });
 
     afterEach(async () => {
-      User = context.database.model(modelName.USER);
+      User = context.dataSource.model(modelName.USER);
       await User.destroy({ where: {} });
     });
 

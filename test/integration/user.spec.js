@@ -14,17 +14,17 @@ const { createJwt } = require('../../src/utils');
 // Setup.
 const { buildResources, teardownResources } = require('./setup');
 
-jest.setTimeout(30_000);
-
 describe('User', () => {
   let context;
 
   beforeAll(async () => {
     context = await buildResources();
-  });
+  }, 60_000);
 
   afterAll(async () => {
-    await teardownResources(context);
+    if (context) {
+      await teardownResources(context);
+    }
   });
 
   describe('GET /user/:id', () => {
@@ -32,7 +32,7 @@ describe('User', () => {
     const accessToken = createJwt(tokenSubject.ACCESS_TOKEN, payload);
 
     beforeEach(async () => {
-      const User = context.database.model(modelName.USER);
+      const User = context.dataSource.model(modelName.USER);
       await User.create({
         id: 1,
         username: 'testuser',
@@ -41,7 +41,7 @@ describe('User', () => {
     });
 
     afterEach(async () => {
-      const User = context.database.model(modelName.USER);
+      const User = context.dataSource.model(modelName.USER);
       await User.destroy({ where: {} });
     });
 

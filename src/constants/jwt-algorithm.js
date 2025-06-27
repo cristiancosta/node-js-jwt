@@ -1,4 +1,4 @@
-module.exports = {
+const jwtAlgorithm = {
   HS256: 'HS256',
   HS384: 'HS384',
   HS512: 'HS512',
@@ -13,3 +13,5 @@ module.exports = {
   PS512: 'PS512',
   none: 'none'
 };
+
+module.exports = jwtAlgorithm;

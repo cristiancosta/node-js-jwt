@@ -3,8 +3,8 @@ require('dotenv').config();
 const configuration = {
   db: {
     host: process.env.DB_HOST || 'localhost',
-    port: parseInt(process.env.DB_PORT, 10) || 5432,
-    user: process.env.DB_USER || 'root',
+    port: parseInt(process.env.DB_PORT ?? '5432', 10),
+    username: process.env.DB_USERNAME || 'root',
     password: process.env.DB_PASSWORD || 'root',
     database: process.env.DB_NAME || 'nodejwt'
   },
@@ -14,10 +14,10 @@ const configuration = {
     refreshTokenDuration: process.env.JWT_REFRESH_TOKEN_DURATION || '3d'
   },
   server: {
-    port: parseInt(process.env.SERVER_PORT, 10) || 8080
+    port: parseInt(process.env.SERVER_PORT ?? '8080', 10)
   },
   swagger: {
-    user: process.env.SWAGGER_USERNAME || 'admin',
+    username: process.env.SWAGGER_USERNAME || 'admin',
     password: process.env.SWAGGER_PASSWORD || 'admin'
   }
 };

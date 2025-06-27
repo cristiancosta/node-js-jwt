@@ -1,6 +1,6 @@
 const swaggerJSDoc = require('swagger-jsdoc');
 
-const swaggerSpecification = swaggerJSDoc({
+const swaggerDoc = swaggerJSDoc({
   failOnErrors: true,
   definition: {
     openapi: '3.0.0',
@@ -17,4 +17,4 @@ const swaggerSpecification = swaggerJSDoc({
   apis: [`${__dirname}/routes/**/**.js`]
 });
 
-module.exports = swaggerSpecification;
+module.exports = swaggerDoc;

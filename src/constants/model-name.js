@@ -1,3 +1,5 @@
-module.exports = {
+const modelName = {
   USER: 'user'
 };
+
+module.exports = modelName;

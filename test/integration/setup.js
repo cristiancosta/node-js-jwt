@@ -1,36 +1,30 @@
 const { PostgreSqlContainer } = require('@testcontainers/postgresql');
 
 // Database.
-const createDatabaseConnection = require('../../src/sequelize');
+const createDataSource = require('../../src/data-source');
 
 // App.
 const createExpressApp = require('../../src/app');
 
 const buildResources = async () => {
-  const container = await new PostgreSqlContainer('postgres')
-    .withEnvironment({
-      POSTGRES_USER: 'test',
-      POSTGRES_PASSWORD: 'test',
-      POSTGRES_DB: 'test'
-    })
-    .start();
+  const container = await new PostgreSqlContainer('postgres').start();
 
   const dbConfig = {
     database: container.getDatabase(),
-    user: container.getUsername(),
+    username: container.getUsername(),
     password: container.getPassword(),
     host: container.getHost(),
     port: container.getPort()
   };
-  const database = await createDatabaseConnection(dbConfig).sync();
-  const app = createExpressApp(database);
+  const dataSource = await createDataSource(dbConfig).sync();
+  const app = createExpressApp(dataSource);
 
-  const context = { container, database, app };
+  const context = { container, dataSource, app };
   return context;
 };
 
 const teardownResources = async (context) => {
-  await context.database.close();
+  await context.dataSource.close();
   await context.container.stop();
 };
 

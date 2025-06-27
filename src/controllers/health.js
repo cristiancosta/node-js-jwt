@@ -1,4 +1,4 @@
-const healthController = (database) => {
+const healthController = (dataSource) => {
   const getHealthInfo = async (req, res) => {
     const result = {
       status: 'healthy',
@@ -7,7 +7,7 @@ const healthController = (database) => {
       }
     };
     try {
-      await database.authenticate();
+      await dataSource.authenticate();
     } catch (error) {
       result.dependencies = {
         database: 'not-connected',

@@ -1,6 +1,6 @@
-const authController = (database) => {
+const authController = (dataSource) => {
   // Repositories.
-  const userRepository = require('../repositories/user')(database);
+  const userRepository = require('../repositories/user')(dataSource);
 
   // Services.
   const authService = require('../services/auth')({ userRepository });

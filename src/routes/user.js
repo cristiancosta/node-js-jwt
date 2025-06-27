@@ -3,11 +3,11 @@ const express = require('express');
 // Middlewares.
 const { authBearer } = require('../middlewares');
 
-const userRoute = (database) => {
+const userRoute = (dataSource) => {
   const router = express.Router();
 
   // Controllers.
-  const userController = require('../controllers/user')(database);
+  const userController = require('../controllers/user')(dataSource);
 
   /**
    * @swagger
