@@ -3,9 +3,11 @@ const expressBasicAuth = require('express-basic-auth');
 // Configuration.
 const configuration = require('../configuration');
 
-const { user, password } = configuration.swagger;
+const { username, password } = configuration.swagger;
 
-module.exports = expressBasicAuth({
-  users: { [user]: password },
+const swaggerBasicAuth = expressBasicAuth({
+  users: { [username]: password },
   challenge: true
 });
+
+module.exports = swaggerBasicAuth;

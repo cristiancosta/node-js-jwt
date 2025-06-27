@@ -5,14 +5,14 @@ const createExpressApp = require('./app');
 const configuration = require('./configuration');
 
 // Database.
-const createDatabaseConnection = require('./sequelize');
+const createDataSource = require('./data-source');
 
 const { db } = configuration;
-createDatabaseConnection(db)
+createDataSource(db)
   .sync()
-  .then((sequelize) => {
+  .then((dataSource) => {
     const { port } = configuration.server;
-    createExpressApp(sequelize).listen(port, () =>
+    createExpressApp(dataSource).listen(port, () =>
       console.log(`Server running on port ${port}`)
     );
     console.log('Server connected to database');

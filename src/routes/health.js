@@ -1,10 +1,10 @@
 const express = require('express');
 
-const healthRoute = (database) => {
+const healthRoute = (dataSource) => {
   const router = express.Router();
 
   // Controllers.
-  const healthController = require('../controllers/health')(database);
+  const healthController = require('../controllers/health')(dataSource);
 
   /**
    * @swagger

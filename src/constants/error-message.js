@@ -1,4 +1,4 @@
-module.exports = {
+const errorMessage = {
   USER_NOT_FOUND: 'USER_NOT_FOUND',
   USER_ALREADY_EXIST: 'USER_ALREADY_EXIST',
   INVALID_CREDENTIALS: 'INVALID_CREDENTIALS',
@@ -14,3 +14,5 @@ module.exports = {
   INVALID_USER_TOKEN: 'INVALID_USER_TOKEN',
   INVALID_TOKEN_SUBJECT: 'INVALID_TOKEN_SUBJECT'
 };
+
+module.exports = errorMessage;

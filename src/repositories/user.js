@@ -6,8 +6,8 @@ const InternalServerError = require('../errors/internal-server');
 // Constants.
 const { errorMessage, modelName } = require('../constants');
 
-const userRepository = (database) => {
-  const User = database.model(modelName.USER);
+const userRepository = (dataSource) => {
+  const User = dataSource.model(modelName.USER);
 
   const getUserByUsername = async (username) => {
     try {

@@ -1,10 +1,10 @@
 const express = require('express');
 
-const authRoute = (database) => {
+const authRoute = (dataSource) => {
   const router = express.Router();
 
   // Controllers.
-  const authController = require('../controllers/auth')(database);
+  const authController = require('../controllers/auth')(dataSource);
 
   /**
    * @swagger

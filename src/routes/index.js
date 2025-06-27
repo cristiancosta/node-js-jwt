@@ -1,12 +1,12 @@
 const express = require('express');
 
-const routes = (database) => {
+const routes = (dataSource) => {
   const router = express.Router();
 
   // Routes.
-  const authRoute = require('./auth')(database);
-  const healthRoute = require('./health')(database);
-  const userRoute = require('./user')(database);
+  const authRoute = require('./auth')(dataSource);
+  const healthRoute = require('./health')(dataSource);
+  const userRoute = require('./user')(dataSource);
 
   router.use('/auth', authRoute);
   router.use('/health', healthRoute);

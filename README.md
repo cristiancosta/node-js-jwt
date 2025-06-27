@@ -79,7 +79,7 @@ Then create a `.env` file in the project root with the following content:
 
 ```env
 DB_HOST=localhost
-DB_USER=root
+DB_USERNAME=root
 DB_PASSWORD=root
 DB_NAME=nodejwt
 DB_PORT=5432

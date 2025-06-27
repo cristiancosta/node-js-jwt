@@ -6,17 +6,17 @@ const { httpStatusCode } = require('../../src/constants');
 // Setup.
 const { buildResources, teardownResources } = require('./setup');
 
-jest.setTimeout(30_000);
-
 describe('Health', () => {
   let context;
 
   beforeAll(async () => {
     context = await buildResources();
-  });
+  }, 60_000);
 
   afterAll(async () => {
-    await teardownResources(context);
+    if (context) {
+      await teardownResources(context);
+    }
   });
 
   describe('GET /health', () => {
@@ -32,7 +32,7 @@ describe('Health', () => {
     });
 
     it('Should return 200 status code and with healthy status and not-connected database information', async () => {
-      await context.database.close();
+      await context.dataSource.close();
       const response = await request(context.app).get('/health');
 
       expect(response.status).toBe(httpStatusCode.OK);

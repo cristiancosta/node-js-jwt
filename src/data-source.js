@@ -3,9 +3,9 @@ const { Sequelize } = require('sequelize');
 // Models.
 const initModels = require('./models');
 
-const createDatabaseConnection = (dbConfig) => {
-  const { database, user, password, host, port } = dbConfig;
-  const sequelize = new Sequelize(database, user, password, {
+const createDataSource = (dbConfig) => {
+  const { database, username, password, host, port } = dbConfig;
+  const sequelize = new Sequelize(database, username, password, {
     host,
     port,
     dialect: 'postgres',
@@ -17,4 +17,4 @@ const createDatabaseConnection = (dbConfig) => {
   return sequelize;
 };
 
-module.exports = createDatabaseConnection;
+module.exports = createDataSource;
