@@ -154,7 +154,6 @@ The project uses **Husky** to automatically run the following before each commit
 
 ```bash
 npx lint-staged  # Runs ESLint + Prettier
-npm test         # Executes integration tests
 ```
 
 ---
