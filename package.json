@@ -1,7 +1,7 @@
 {
   "name": "node-js-jwt",
   "version": "1.0.0",
-  "description": "Node js JWT",
+  "description": "Node js jwt",
   "main": "src/server.js",
   "scripts": {
     "start": "nodemon src/server.js",

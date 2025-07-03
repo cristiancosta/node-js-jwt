@@ -7,7 +7,7 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Debug server",
+      "name": "Server debugger",
       "skipFiles": [
         "<node_internals>/**"
       ],
@@ -17,7 +17,7 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Debug tests",
+      "name": "Tests debugger",
       "program": "${workspaceFolder}/node_modules/jest/bin/jest.js",
       "args": [
         "--runInBand"

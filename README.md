@@ -40,6 +40,7 @@ Features include:
 ```
 ├── .github/
 ├── .husky/
+├── .vscode/                # Debuggers and workspace configuration.
 ├── src/
 |   ├── constants/          # HTTP codes, error messages, table/model names.
 |   ├── controllers/        # Endpoint logic.
@@ -52,9 +53,9 @@ Features include:
 |   ├── utils/              # Reusable functions.
 |   ├── app.js              # Express app configuration.
 |   ├── configuration.js    # .env configuration entry point.
-|   ├── sequelize.js        # Sequelize configuration.
-|   ├── swagger.js          # Swagger configuration.
-|   └── server.js           # Entry point.
+|   ├── data-source.js      # Sequelize configuration.
+|   ├── server.js           # Entry point.
+|   └── swagger.js          # Swagger configuration.
 ├── test/                   # Unit and integration tests using jest, supertest and testcontainers.
 ├── .gitignore              # Default gitignore file provided by GitHub.
 ├── .prettierrc             # Prettier configuration file.
@@ -194,7 +195,9 @@ Contributions are welcome!
 
 ## ☕ Donations
 
-If you'd like to support this project, feel free to donate a coffee: [![Ko-Fi](https://img.shields.io/badge/Ko--fi-Donate-red?logo=ko-fi)](https://ko-fi.com/cristiancosta)
+If you'd like to support this project, feel free to donate a coffee.
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/C0C81GYN0D)
 
 ---
 
