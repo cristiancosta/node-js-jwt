@@ -14,4 +14,4 @@ const jwtAlgorithm = {
   none: 'none'
 };
 
-module.exports = jwtAlgorithm;
+module.exports = { jwtAlgorithm };

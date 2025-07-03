@@ -1,8 +1,8 @@
 // Constants.
-const { httpStatusCode } = require('../constants');
+const { httpStatusCode } = require('../constants/http-status-code');
 
 // Errors.
-const BaseError = require('./base');
+const { BaseError } = require('./base');
 
 class InternalServerError extends BaseError {
   constructor(message, errors) {
@@ -10,4 +10,4 @@ class InternalServerError extends BaseError {
   }
 }
 
-module.exports = InternalServerError;
+module.exports = { InternalServerError };

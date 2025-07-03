@@ -1,5 +1,5 @@
 // Errors.
-const NotFoundError = require('../../../src/errors/not-found');
+const { NotFoundError } = require('../../../src/errors/not-found');
 
 // Services.
 const userService = require('../../../src/services/user');

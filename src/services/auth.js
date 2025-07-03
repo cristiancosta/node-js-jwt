@@ -2,16 +2,18 @@ const { v4: uuidv4 } = require('uuid');
 const { compareSync, hashSync } = require('bcryptjs');
 
 // Constants.
-const { errorMessage, tokenSubject } = require('../constants');
+const { errorMessage } = require('../constants/error-message');
+const { tokenSubject } = require('../constants/token-subject');
 
 // Errors.
-const BadRequestError = require('../errors/bad-request');
-const ConflictError = require('../errors/conflict');
-const NotFoundError = require('../errors/not-found');
-const UnauthorizedError = require('../errors/unauthorized');
+const { BadRequestError } = require('../errors/bad-request');
+const { ConflictError } = require('../errors/conflict');
+const { NotFoundError } = require('../errors/not-found');
+const { UnauthorizedError } = require('../errors/unauthorized');
 
 // Utils.
-const { createJwt, verifyJwt } = require('../utils');
+const { createJwt } = require('../utils/create-jwt');
+const { verifyJwt } = require('../utils/verify-jwt');
 
 const authService = ({ userRepository }) => {
   const signIn = async ({ username, password }) => {

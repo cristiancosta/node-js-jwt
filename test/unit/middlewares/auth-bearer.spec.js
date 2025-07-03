@@ -1,18 +1,18 @@
 // Constants.
-const { errorMessage, tokenSubject } = require('../../../src/constants');
+const { errorMessage } = require('../../../src/constants/error-message');
+const { tokenSubject } = require('../../../src/constants/token-subject');
 
 // Errors.
-const UnauthorizedError = require('../../../src/errors/unauthorized');
-const ConflictError = require('../../../src/errors/conflict');
+const { UnauthorizedError } = require('../../../src/errors/unauthorized');
+const { ConflictError } = require('../../../src/errors/conflict');
 
 // Middlewares.
-const { authBearer } = require('../../../src/middlewares');
+const { authBearer } = require('../../../src/middlewares/auth-bearer');
 
 // Utils.
-const { verifyJwt } = require('../../../src/utils');
+const { verifyJwt } = require('../../../src/utils/verify-jwt');
 
-// Mock de verifyJwt
-jest.mock('../../../src/utils', () => ({
+jest.mock('../../../src/utils/verify-jwt', () => ({
   verifyJwt: jest.fn()
 }));
 

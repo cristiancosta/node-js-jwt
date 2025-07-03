@@ -1,15 +1,13 @@
 const request = require('supertest');
 
 // Constants.
-const {
-  httpStatusCode,
-  errorMessage,
-  modelName,
-  tokenSubject
-} = require('../../src/constants');
+const { errorMessage } = require('../../src/constants/error-message');
+const { httpStatusCode } = require('../../src/constants/http-status-code');
+const { modelName } = require('../../src/constants/model-name');
+const { tokenSubject } = require('../../src/constants/token-subject');
 
 // Utils.
-const { createJwt } = require('../../src/utils');
+const { createJwt } = require('../../src/utils/create-jwt');
 
 // Setup.
 const { buildResources, teardownResources } = require('./setup');

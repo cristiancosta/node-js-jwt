@@ -1,10 +1,10 @@
 const { PostgreSqlContainer } = require('@testcontainers/postgresql');
 
 // Database.
-const createDataSource = require('../../src/data-source');
+const { createDataSource } = require('../../src/data-source');
 
 // App.
-const createExpressApp = require('../../src/app');
+const { createExpressApp } = require('../../src/app');
 
 const buildResources = async () => {
   const container = await new PostgreSqlContainer('postgres').start();

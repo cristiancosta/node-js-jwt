@@ -2,20 +2,22 @@ const { v4: uuidv4 } = require('uuid');
 const { compareSync, hashSync } = require('bcryptjs');
 
 // Errors.
-const BadRequestError = require('../../../src/errors/bad-request');
-const ConflictError = require('../../../src/errors/conflict');
-const NotFoundError = require('../../../src/errors/not-found');
-const UnauthorizedError = require('../../../src/errors/unauthorized');
+const { BadRequestError } = require('../../../src/errors/bad-request');
+const { ConflictError } = require('../../../src/errors/conflict');
+const { NotFoundError } = require('../../../src/errors/not-found');
+const { UnauthorizedError } = require('../../../src/errors/unauthorized');
 
 // Services.
 const authService = require('../../../src/services/auth');
 
 // Utils
-const { createJwt, verifyJwt } = require('../../../src/utils');
+const { createJwt } = require('../../../src/utils/create-jwt');
+const { verifyJwt } = require('../../../src/utils/verify-jwt');
 
 jest.mock('bcryptjs');
 jest.mock('uuid');
-jest.mock('../../../src/utils');
+jest.mock('../../../src/utils/create-jwt');
+jest.mock('../../../src/utils/verify-jwt');
 
 describe('Auth', () => {
   let service;

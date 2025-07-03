@@ -1,7 +1,7 @@
 const request = require('supertest');
 
 // Constants.
-const { httpStatusCode } = require('../../src/constants');
+const { httpStatusCode } = require('../../src/constants/http-status-code');
 
 // Setup.
 const { buildResources, teardownResources } = require('./setup');

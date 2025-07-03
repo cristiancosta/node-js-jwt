@@ -2,4 +2,4 @@ const tableName = {
   USERS: 'Users'
 };
 
-module.exports = tableName;
+module.exports = { tableName };

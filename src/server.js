@@ -1,11 +1,11 @@
 // App.
-const createExpressApp = require('./app');
+const { createExpressApp } = require('./app');
 
 // Configuration.
-const configuration = require('./configuration');
+const { configuration } = require('./configuration');
 
 // Database.
-const createDataSource = require('./data-source');
+const { createDataSource } = require('./data-source');
 
 const { db } = configuration;
 createDataSource(db)

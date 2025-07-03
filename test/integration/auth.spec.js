@@ -4,18 +4,17 @@ const { sign } = require('jsonwebtoken');
 const { compareSync, hashSync } = require('bcryptjs');
 
 // Constants.
-const {
-  httpStatusCode,
-  errorMessage,
-  modelName,
-  tokenSubject
-} = require('../../src/constants');
+const { errorMessage } = require('../../src/constants/error-message');
+const { httpStatusCode } = require('../../src/constants/http-status-code');
+const { modelName } = require('../../src/constants/model-name');
+const { tokenSubject } = require('../../src/constants/token-subject');
 
 // Configuration.
-const configuration = require('../../src/configuration');
+const { configuration } = require('../../src/configuration');
 
 // Utils.
-const { createJwt, verifyJwt } = require('../../src/utils');
+const { createJwt } = require('../../src/utils/create-jwt');
+const { verifyJwt } = require('../../src/utils/verify-jwt');
 
 // Setup.
 const { buildResources, teardownResources } = require('./setup');

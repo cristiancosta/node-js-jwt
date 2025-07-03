@@ -1,8 +1,8 @@
 // Constants.
-const { errorMessage } = require('../constants');
+const { errorMessage } = require('../constants/error-message');
 
 // Errors.
-const NotFoundError = require('../errors/not-found');
+const { NotFoundError } = require('../errors/not-found');
 
 const userService = ({ userRepository }) => {
   const getUser = async ({ id }) => {

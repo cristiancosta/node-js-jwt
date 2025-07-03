@@ -1,13 +1,15 @@
 const { sign } = require('jsonwebtoken');
 
 // Configuration.
-const configuration = require('../configuration');
+const { configuration } = require('../configuration');
 
 // Constants.
-const { tokenSubject, errorMessage, jwtAlgorithm } = require('../constants');
+const { errorMessage } = require('../constants/error-message');
+const { jwtAlgorithm } = require('../constants/jwt-algorithm');
+const { tokenSubject } = require('../constants/token-subject');
 
 // Errors.
-const ConflictError = require('../errors/conflict');
+const { ConflictError } = require('../errors/conflict');
 
 const createJwt = (subject, payload) => {
   const { secret } = configuration.jwt;
@@ -37,4 +39,4 @@ const createJwt = (subject, payload) => {
   }
 };
 
-module.exports = createJwt;
+module.exports = { createJwt };

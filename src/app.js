@@ -3,10 +3,11 @@ const bodyParser = require('body-parser');
 const swaggerUi = require('swagger-ui-express');
 
 // Swagger specification.
-const swaggerDoc = require('./swagger');
+const { swaggerDoc } = require('./swagger');
 
 // Middlewares.
-const { errorHandler, swaggerBasicAuth } = require('./middlewares');
+const { errorHandler } = require('./middlewares/error-handler');
+const { swaggerBasicAuth } = require('./middlewares/swagger-basic-auth');
 
 const createExpressApp = (dataSource) => {
   const app = express();
@@ -27,4 +28,4 @@ const createExpressApp = (dataSource) => {
   return app;
 };
 
-module.exports = createExpressApp;
+module.exports = { createExpressApp };

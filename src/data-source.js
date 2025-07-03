@@ -1,7 +1,7 @@
 const { Sequelize } = require('sequelize');
 
 // Models.
-const initModels = require('./models');
+const { initModels } = require('./models');
 
 const createDataSource = (dbConfig) => {
   const { database, username, password, host, port } = dbConfig;
@@ -17,4 +17,4 @@ const createDataSource = (dbConfig) => {
   return sequelize;
 };
 
-module.exports = createDataSource;
+module.exports = { createDataSource };

@@ -5,14 +5,15 @@ const {
 } = require('jsonwebtoken');
 
 // Constants.
-const { errorMessage, jwtAlgorithm } = require('../constants');
+const { errorMessage } = require('../constants/error-message');
+const { jwtAlgorithm } = require('../constants/jwt-algorithm');
 
 // Configuration.
-const configuration = require('../configuration');
+const { configuration } = require('../configuration');
 
 // Errors.
-const UnauthorizedError = require('../errors/unauthorized');
-const InternalServerError = require('../errors/internal-server');
+const { UnauthorizedError } = require('../errors/unauthorized');
+const { InternalServerError } = require('../errors/internal-server');
 
 const verifyJwt = (token, expectedSubject) => {
   let jwt;
@@ -38,4 +39,4 @@ const verifyJwt = (token, expectedSubject) => {
   return jwt.payload;
 };
 
-module.exports = verifyJwt;
+module.exports = { verifyJwt };

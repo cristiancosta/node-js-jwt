@@ -1,8 +1,9 @@
 // Constants.
-const { httpStatusCode, errorMessage } = require('../constants');
+const { errorMessage } = require('../constants/error-message');
+const { httpStatusCode } = require('../constants/http-status-code');
 
 // Errors.
-const BaseError = require('../errors/base');
+const { BaseError } = require('../errors/base');
 
 const errorHandler = (error, _req, res, _next) => {
   if (error instanceof BaseError) {
@@ -16,4 +17,4 @@ const errorHandler = (error, _req, res, _next) => {
   }
 };
 
-module.exports = errorHandler;
+module.exports = { errorHandler };

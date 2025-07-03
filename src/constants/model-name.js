@@ -2,4 +2,4 @@ const modelName = {
   USER: 'user'
 };
 
-module.exports = modelName;
+module.exports = { modelName };

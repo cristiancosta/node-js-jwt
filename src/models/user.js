@@ -1,7 +1,8 @@
 const { DataTypes } = require('sequelize');
 
 // Constants.
-const { modelName, tableName } = require('../constants');
+const { modelName } = require('../constants/model-name');
+const { tableName } = require('../constants/table-name');
 
 const initUserModel = (sequelize) =>
   sequelize.define(
@@ -36,4 +37,4 @@ const initUserModel = (sequelize) =>
     }
   );
 
-module.exports = initUserModel;
+module.exports = { initUserModel };

@@ -1,12 +1,13 @@
 // Constants.
-const { errorMessage, tokenSubject } = require('../constants');
+const { errorMessage } = require('../constants/error-message');
+const { tokenSubject } = require('../constants/token-subject');
 
 // Errors.
-const ConflictError = require('../errors/conflict');
-const UnauthorizedError = require('../errors/unauthorized');
+const { ConflictError } = require('../errors/conflict');
+const { UnauthorizedError } = require('../errors/unauthorized');
 
 // Utils.
-const { verifyJwt } = require('../utils');
+const { verifyJwt } = require('../utils/verify-jwt');
 
 const authBearer = (req, res, next) => {
   const authorization = req.headers.authorization;
@@ -27,4 +28,4 @@ const authBearer = (req, res, next) => {
   }
 };
 
-module.exports = authBearer;
+module.exports = { authBearer };

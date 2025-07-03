@@ -1,10 +1,11 @@
 const { Op } = require('sequelize');
 
 // Errors.
-const InternalServerError = require('../errors/internal-server');
+const { InternalServerError } = require('../errors/internal-server');
 
 // Constants.
-const { errorMessage, modelName } = require('../constants');
+const { errorMessage } = require('../constants/error-message');
+const { modelName } = require('../constants/model-name');
 
 const userRepository = (dataSource) => {
   const User = dataSource.model(modelName.USER);

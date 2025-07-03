@@ -17,4 +17,4 @@ const swaggerDoc = swaggerJSDoc({
   apis: [`${__dirname}/routes/**/**.js`]
 });
 
-module.exports = swaggerDoc;
+module.exports = { swaggerDoc };

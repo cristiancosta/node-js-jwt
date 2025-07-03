@@ -3,4 +3,4 @@ const tokenSubject = {
   ACCESS_TOKEN: 'ACCESS_TOKEN'
 };
 
-module.exports = tokenSubject;
+module.exports = { tokenSubject };

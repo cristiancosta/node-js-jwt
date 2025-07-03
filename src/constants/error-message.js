@@ -15,4 +15,4 @@ const errorMessage = {
   INVALID_TOKEN_SUBJECT: 'INVALID_TOKEN_SUBJECT'
 };
 
-module.exports = errorMessage;
+module.exports = { errorMessage };

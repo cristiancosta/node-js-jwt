@@ -1,7 +1,8 @@
-const initUserModel = require('./user');
+// Models.
+const { initUserModel } = require('./user');
 
 const initModels = (sequelize) => {
   initUserModel(sequelize);
 };
 
-module.exports = initModels;
+module.exports = { initModels };

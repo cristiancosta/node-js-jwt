@@ -5,16 +5,17 @@ const {
 } = require('jsonwebtoken');
 
 // Constants.
-const { tokenSubject, jwtAlgorithm } = require('../../../src/constants');
+const { jwtAlgorithm } = require('../../../src/constants/jwt-algorithm');
+const { tokenSubject } = require('../../../src/constants/token-subject');
 
 // Configuration.
-const configuration = require('../../../src/configuration');
+const { configuration } = require('../../../src/configuration');
 
 // Errors.
-const UnauthorizedError = require('../../../src/errors/unauthorized');
+const { UnauthorizedError } = require('../../../src/errors/unauthorized');
 
 // Utils.
-const { verifyJwt } = require('../../../src/utils');
+const { verifyJwt } = require('../../../src/utils/verify-jwt');
 
 jest.mock('jsonwebtoken');
 

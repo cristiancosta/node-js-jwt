@@ -1,20 +1,18 @@
 const { sign } = require('jsonwebtoken');
 
 // Constants.
-const {
-  tokenSubject,
-  jwtAlgorithm,
-  errorMessage
-} = require('../../../src/constants');
+const { errorMessage } = require('../../../src/constants/error-message');
+const { jwtAlgorithm } = require('../../../src/constants/jwt-algorithm');
+const { tokenSubject } = require('../../../src/constants/token-subject');
 
 // Configuration.
-const configuration = require('../../../src/configuration');
+const { configuration } = require('../../../src/configuration');
 
 // Errors.
-const ConflictError = require('../../../src/errors/conflict');
+const { ConflictError } = require('../../../src/errors/conflict');
 
 // Utils.
-const { createJwt } = require('../../../src/utils');
+const { createJwt } = require('../../../src/utils/create-jwt');
 
 jest.mock('jsonwebtoken');
 
