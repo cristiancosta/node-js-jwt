@@ -37,7 +37,7 @@ const authRoute = (dataSource) => {
    *        content:
    *          application/json:
    *            schema:
-   *              $ref: '#/components/schemas/LoginResponse'
+   *              $ref: '#/components/schemas/SignInResponse'
    *      400:
    *        description: Bad request
    *        content:
@@ -131,7 +131,7 @@ const authRoute = (dataSource) => {
    *        content:
    *          application/json:
    *            schema:
-   *              $ref: '#/components/schemas/LoginResponse'
+   *              $ref: '#/components/schemas/SignInResponse'
    *      401:
    *        description: Unauthorized
    *        content:
@@ -160,7 +160,7 @@ module.exports = authRoute;
  * @swagger
  * components:
  *  schemas:
- *    LoginResponse:
+ *    SignInResponse:
  *      type: object
  *      properties:
  *        accessToken:
