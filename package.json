@@ -41,7 +41,7 @@
     "uuid": "^11.1.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.31.0",
+    "@eslint/js": "^9.34.0",
     "@testcontainers/postgresql": "^11.5.0",
     "eslint": "^9.34.0",
     "eslint-plugin-jest": "^29.0.1",
